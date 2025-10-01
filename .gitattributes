@@ -1,0 +1,138 @@
+*               text eol=lf
+
+.gitattributes  text
+.gitignore      text
+.editorconfig   text
+.env            text
+Dockerfile      text eol=lf
+
+*.java          text diff=java eol=lf
+*.kt            text diff=java eol=lf
+*.groovy        text diff=java eol=lf
+*.scala         text diff=java eol=lf
+*.gradle        text diff=java eol=lf
+*.gradle.kts    text diff=java eol=lf
+
+*.css           text diff=css eol=lf
+*.scss          text diff=css eol=lf
+*.sass          text
+*.df            text
+*.htm           text diff=html eol=lf
+*.HTM           text diff=html eol=lf
+*.html          text diff=html eol=lf
+*.js            text eol=lf
+*.jsp           text eol=lf
+*.jspf          text eol=lf
+*.jspx          text eol=lf
+*.properties    text eol=lf
+*.tld           text eol=lf
+*.tag           text eol=lf
+*.tagx          text eol=lf
+*.xml           text eol=lf
+*.XML           text eol=lf
+*.yaml          text eol=lf
+*.yml           text eol=lf
+*.YML           text eol=lf
+*.sql           text linguist-detectable=true linguist-language=sql eol=lf
+*.SQL           text linguist-detectable=true linguist-language=sql eol=lf
+
+*.pxd           text diff=python
+*.py            text diff=python
+*.py3           text diff=python
+*.pyw           text diff=python
+*.pyx           text diff=python
+*.pyz           text diff=python
+*.pyi           text diff=python
+
+*.md            text diff=markdown eol=lf
+*.mdx           text diff=markdown
+*.markdown      text diff=markdown eol=lf
+*.txt           text eol=lf
+*.TXT           text eol=lf
+*.csv           text eol=lf
+*.CSV           text eol=lf
+*.tab           text eol=lf
+*.tsv           text eol=lf
+*.doc           diff=astextplain
+*.DOC           diff=astextplain
+*.docx          diff=astextplain
+*.DOCX          diff=astextplain
+*.dot           diff=astextplain
+*.DOT           diff=astextplain
+*.pdf           diff=astextplain
+*.PDF           diff=astextplain
+*.rtf           diff=astextplain
+*.RTF           diff=astextplain
+*.bibtex        text diff=bibtex eol=lf
+*.tex           text diff=tex eol=lf
+*.adoc          text eol=lf
+*.textile       text eol=lf
+*.mustache      text eol=lf
+*.tmpl          text
+*.tpl           text
+*.cnf           text
+*.conf          text
+*.config        text
+
+*.bash          text eol=lf
+*.sh            text eol=lf
+
+*.ini           text
+*.INI           text
+*.bat           text eol=crlf
+*.BAT           text eol=crlf
+*.cmd           text eol=crlf
+*.msh           text eol=crlf
+*.msh1          text eol=crlf
+*.msh2          text eol=crlf
+*.mshxml        text eol=crlf
+*.msh1xml       text eol=crlf
+*.msh2xml       text eol=crlf
+*.mcf           text eol=crlf
+
+*.svg           text
+*.SVG           text
+*.svgz          binary
+*.png           binary
+*.PNG           binary
+*.jpg           binary
+*.JPG           binary
+*.jpeg          binary
+*.jng           binary
+*.jp2           binary
+*.bmp           binary
+*.BMP           binary
+*.eps           binary
+*.gif           binary
+*.GIF           binary
+*.ico           binary
+*.ICO           binary
+*.jpx           binary
+*.jxr           binary
+*.pdf           binary
+*.PDF           binary
+*.psb           binary
+*.psd           binary
+*.tif           binary
+*.TIF           binary
+*.tiff          binary
+*.wbmp          binary
+*.webp          binary
+*.class         binary export-ignore
+*.dll           binary
+*.DLL           binary
+*.ear           binary
+*.jar           binary
+*.so            binary
+*.war           binary
+*.jks           binary
+*.zip           binary
+*.tgz           binary
+*.tar.gz        binary
+*.db            binary
+*.p             binary
+*.pkl           binary
+*.pickle        binary
+*.pyc           binary export-ignore
+*.pyo           binary export-ignore
+*.pyd           binary
