@@ -1,7 +1,7 @@
 Document tracking service
 
 # About
-Simple Spring Boot service allowing REST access to tasks
+Simple Spring Boot service allowing REST access to documents
 
 # Usage
 
@@ -62,6 +62,7 @@ curl --user "webuser:websecret" -X POST localhost:8080/api/v1/user -H 'Content-t
 ```shell
 curl --user "webuser:websecret" -X PUT localhost:8080/api/v1/user/1 -H 'Content-type:application/json' -d '{"id": "1", "name": "User-updated", "code": "usr-upd"}'
 ```
+
 ### Query
 ```shell
 curl --user "webuser:websecret" localhost:8080/api/v1/user/operation/query?startTime=2023-01-01T00:00:05\&endTime=2023-01-02T10:00:00\&taskDefinitionId=1

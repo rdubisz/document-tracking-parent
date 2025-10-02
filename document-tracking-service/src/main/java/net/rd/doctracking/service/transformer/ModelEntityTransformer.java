@@ -1,51 +1,51 @@
 package net.rd.doctracking.service.transformer;
 
-import net.rd.doctracking.service.jpa.entity.TaskDefinitionEntity;
-import net.rd.doctracking.service.jpa.entity.TaskOperationEntity;
-import net.rd.doctracking.service.model.TaskDefinitionModel;
-import net.rd.doctracking.service.model.TaskOperationModel;
+import net.rd.doctracking.service.jpa.entity.TeamEntity;
+import net.rd.doctracking.service.jpa.entity.PersonEntity;
+import net.rd.doctracking.service.model.TeamModel;
+import net.rd.doctracking.service.model.PersonModel;
 import org.springframework.beans.BeanUtils;
 
 public class ModelEntityTransformer {
 
-    public static TaskDefinitionEntity modelToEntity(final TaskDefinitionModel model) {
+    public static TeamEntity modelToEntity(final TeamModel model) {
         if(model != null) {
-            final TaskDefinitionEntity entity = new TaskDefinitionEntity();
+            final TeamEntity entity = new TeamEntity();
             BeanUtils.copyProperties(model, entity);
             return entity;
         } else
             return null;
     }
 
-    public static TaskDefinitionModel entityToModel(final TaskDefinitionEntity entity) {
+    public static TeamModel entityToModel(final TeamEntity entity) {
         if(entity != null) {
-            final TaskDefinitionModel model = new TaskDefinitionModel();
+            final TeamModel model = new TeamModel();
             BeanUtils.copyProperties(entity, model);
             return model;
         } else
             return null;
     }
 
-    public static TaskOperationEntity modelToEntity(final TaskOperationModel model) {
+    public static PersonEntity modelToEntity(final PersonModel model) {
         if(model != null) {
-            final TaskOperationEntity entity = new TaskOperationEntity();
+            final PersonEntity entity = new PersonEntity();
             BeanUtils.copyProperties(model, entity);
-            if(model.getTaskDefinitionId() != null) {
-                final TaskDefinitionEntity taskDefinitionEntity = new TaskDefinitionEntity();
-                taskDefinitionEntity.setId(model.getTaskDefinitionId());
-                entity.setTaskDefinitionEntity(taskDefinitionEntity);
+            if(model.getTeamId() != null) {
+                final TeamEntity teamEntity = new TeamEntity();
+                teamEntity.setId(model.getTeamId());
+                entity.setTeamEntity(teamEntity);
             }
             return entity;
         } else
             return null;
     }
 
-    public static TaskOperationModel entityToModel(final TaskOperationEntity entity) {
+    public static PersonModel entityToModel(final PersonEntity entity) {
         if(entity != null) {
-            final TaskOperationModel model = new TaskOperationModel();
+            final PersonModel model = new PersonModel();
             BeanUtils.copyProperties(entity, model);
-            if(entity.getTaskDefinitionEntity() != null)
-                model.setTaskDefinitionId(entity.getTaskDefinitionEntity().getId());
+            if(entity.getTeamEntity() != null)
+                model.setTeamId(entity.getTeamEntity().getId());
             return model;
         } else
             return null;

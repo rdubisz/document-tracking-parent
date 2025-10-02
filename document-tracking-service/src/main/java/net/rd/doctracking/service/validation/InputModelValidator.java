@@ -5,56 +5,54 @@ import org.springframework.util.StringUtils;
 
 public class InputModelValidator {
 
-    public static boolean valid(final TaskDefinitionModel model) {
-        if(model == null)
+    public static final int MAX_STR_LENGTH = 500;
+
+    public static boolean valid(final TeamModel model) {
+        return model != null
+                && validMandatoryString(model.getName());
+    }
+
+    public static boolean valid(final PersonModel model) {
+        return model != null
+                && validMandatoryString(model.getEmail())
+                && validMandatoryString(model.getFirstName())
+                && validMandatoryString(model.getLastName())
+                && model.getTeamId() != null
+                && model.getTeamId() > 0;
+    }
+
+    public static boolean valid(final PersonQueryParamModel model) {
+        return model != null
+                && validOptionalString(model.getEmail())
+                && validOptionalString(model.getFirstName())
+                && validOptionalString(model.getLastName())
+                && (model.getTeamId() == null || model.getTeamId() > 0);
+    }
+
+    static boolean validOptionalString(final String input) {
+        final String trimmed = StringUtils.trimAllWhitespace(input);
+
+        if(!StringUtils.hasLength(trimmed))
+            return true;
+
+        if(trimmed.length() > MAX_STR_LENGTH)
             return false;
 
-        if(!StringUtils.hasLength(model.getName()))
-            return false;
-
-        if(model.getName().length() > 1000)
-            return false;
-
-        if(!StringUtils.hasLength(model.getCode()))
-            return false;
-
-        if(model.getCode().length() > 255)
-            return false;
+        // security checks go here
 
         return true;
     }
 
-    public static boolean valid(final TaskOperationModel model) {
-        if(model == null)
+    static boolean validMandatoryString(final String input) {
+        final String trimmed = StringUtils.trimAllWhitespace(input);
+
+        if(!StringUtils.hasLength(trimmed))
             return false;
 
-        if(model.getTaskDefinitionId() == null)
+        if(trimmed.length() > MAX_STR_LENGTH)
             return false;
 
-        if(model.getDuration() == null)
-            return false;
-
-        if(model.getDuration() < 0)
-            return false;
-
-        if(model.getStartTime() == null)
-            return false;
-
-        return true;
-    }
-
-    public static boolean valid(final TaskOperationQueryParamModel model) {
-        if(model == null)
-            return false;
-
-        if(model.getStartTime() == null)
-            return false;
-
-        if(model.getEndTime() == null)
-            return false;
-
-        if(model.getEndTime().isBefore(model.getStartTime()))
-            return false;
+        // security checks go here
 
         return true;
     }

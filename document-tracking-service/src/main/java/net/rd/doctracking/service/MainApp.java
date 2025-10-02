@@ -17,5 +17,6 @@ public class MainApp {
         log.info("Backend MainApp starting");
 
         SpringApplication.run(MainApp.class, args);
+
     }
 }

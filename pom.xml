@@ -55,8 +55,8 @@
     </repositories>
 
     <scm>
-        <connection>scm:git:https://github.com/rdubisz/tasks-service.git</connection>
-        <url>https://github.com/rdubisz/tasks-service</url>
+        <connection>scm:git:https://github.com/rdubisz/document-tracking-parent.git</connection>
+        <url>https://github.com/rdubisz/document-tracking-parent</url>
     </scm>
 
     <pluginRepositories>

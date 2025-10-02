@@ -13,6 +13,6 @@ public class RootApiController {
     @GetMapping("/")
     public String about() {
         log.info("about()");
-        return "Example Tasks service";
+        return "Example service";
     }
 }
