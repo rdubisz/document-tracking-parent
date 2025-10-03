@@ -1,9 +1,11 @@
 package net.rd.doctracking.service.service;
 
+import net.rd.doctracking.service.exception.QueryParamInvalidException;
 import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
 import net.rd.doctracking.service.exception.PersonEntityNotFoundException;
 import net.rd.doctracking.service.exception.PersonInvalidException;
 import net.rd.doctracking.service.jpa.entity.TeamEntity;
+import net.rd.doctracking.service.model.InactivePersonsQueryModel;
 import net.rd.doctracking.service.transformer.ModelEntityTransformer;
 import net.rd.doctracking.service.validation.InputModelValidator;
 import net.rd.doctracking.service.jpa.entity.PersonEntity;
@@ -117,19 +119,17 @@ public class PersonService {
         personRepository.deleteById(id);
     }
 
-//    public Iterable<PersonModel>  personQuery(final PersonQueryParamModel param) {
-//        log.info("Querying {}", param);
-//
-//        if (!InputModelValidator.valid(param))
-//            throw new PersonQueryParamInvalidException(param);
-//
-//        final Iterable<PersonEntity> entitiesList = personRepository.personQuery(
-//                param.getTeamId(), param.getEmail(), param.getFirstName(), param.getLastName());
-//
-//        final List<PersonModel> modelsList = new ArrayList<>();
-//        for (final PersonEntity personEntity : entitiesList) {
-//            modelsList.add(ModelEntityTransformer.entityToModel(personEntity));
-//        }
-//        return modelsList;
-//    }
+    public InactivePersonsQueryModel inactivePersonsQuery(
+            final LocalDateTime startTime,
+            final LocalDateTime endTime) {
+        log.info("Querying ({} - {})", startTime, endTime);
+
+        if (!InputModelValidator.valid(startTime, endTime))
+            throw new QueryParamInvalidException(startTime, endTime);
+
+        final Long result = personRepository.inactiveUsersQuery(startTime, endTime);
+
+        return new InactivePersonsQueryModel(startTime, endTime, result);
+    }
+
 }

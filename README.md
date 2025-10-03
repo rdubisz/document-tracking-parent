@@ -74,11 +74,17 @@ curl -s --user "webuser:websecret" -X PUT localhost:8080/api/v1/person/1 -H 'Con
 curl -s --user "webuser:websecret" localhost:8080/api/v1/document | jq
 ```
 
-{"id":1,"name":"File-name-0","content":"Some words","fileLength":10,"wordCount":2,"createdAt":"2023-05-01T00:00:00","createdByEmail":"john.doe@company.com","createdById":1}
 
-### Query
+### Query inactive users
+Query number of users inactive in a given period, who were registered before that period
 ```shell
-curl -s --user "webuser:websecret" localhost:8080/api/v1/person/query?startTime=2023-01-01T00:00:05\&endTime=2023-01-02T10:00:00\&taskDefinitionId=1 | jq
+curl -s --user "webuser:websecret" localhost:8080/api/v1/person/inactive?startTime=2023-06-01T00:00:00\&endTime=2023-07-01T00:00:00 | jq
+```
+
+### Document words frequency
+words frequency for a given document id
+```shell
+curl -s --user "webuser:websecret" localhost:8080/api/v1/document/1/wordsFrequency | jq
 ```
 
 

@@ -24,9 +24,9 @@ class PersonExceptionAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler(PersonQueryParamInvalidException.class)
+    @ExceptionHandler(QueryParamInvalidException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    String invalidPersonQueryInput(final PersonQueryParamInvalidException ex) {
+    String invalidQueryInput(final QueryParamInvalidException ex) {
         return ex.getMessage();
     }
 

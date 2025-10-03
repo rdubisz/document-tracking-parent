@@ -1,10 +1,13 @@
 package net.rd.doctracking.service.rest;
 
 import net.rd.doctracking.service.model.PersonModel;
+import net.rd.doctracking.service.model.InactivePersonsQueryModel;
 import net.rd.doctracking.service.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 /**
  * Person REST controller.
@@ -54,14 +57,10 @@ public class PersonApiController {
         personService.deletePerson(id);
     }
 
-//    @GetMapping("/api/v1/person/query")
-//    public Iterable<PersonModel>  personQuery(
-//            @RequestParam final String email,
-//            @RequestParam final String firstname,
-//            @RequestParam final String lastName,
-//            @RequestParam(required = false) final Long teamId) {
-//
-//        final PersonQueryParamModel param = new PersonQueryParamModel(teamId, email, firstname, lastName);
-//        return personService.personQuery(param);
-//    }
+    @GetMapping("/api/v1/person/inactive")
+    public InactivePersonsQueryModel  inactivePersonsQuery(
+            @RequestParam final LocalDateTime startTime,
+            @RequestParam final LocalDateTime endTime) {
+        return personService.inactivePersonsQuery(startTime, endTime);
+    }
 }

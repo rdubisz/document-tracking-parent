@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
+import java.util.Map;
+
 import static net.rd.doctracking.service.rest.RestSecurityConfig.WEB_SECRET;
 import static net.rd.doctracking.service.rest.RestSecurityConfig.WEB_USER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -90,20 +92,6 @@ public class RestApiTest {
 		});
 	}
 
-//	@Test
-//	public void testPersonQuery() throws Exception {
-//		final PersonQueryParamModel param = new PersonQueryParamModel();
-//		param.setEmail("abc@def.net");
-//		param.setFirstName("First");
-//		param.setLastName("Last");
-//
-//		final Map<String, ?> paramsMap = param.toMap();
-//		final FileStatsQueryResultModel result = restTemplate.getForObject(
-//				url() + "/api/v1/person/query?email={email}&firstname={firstname}&teamId={teamId}",
-//				FileStatsQueryResultModel.class, paramsMap);
-//		assertEquals(60420L, result.getResultValue().longValue());
-//	}
-
 	@Test
 	public void testGetAllDocuments() throws Exception {
 		final String returned = restTemplate.getForObject(url() + "/api/v1/document", String.class);
@@ -131,6 +119,24 @@ public class RestApiTest {
 			restTemplate.postForObject(
 					url() + "/api/v1/document", documentModel, DocumentModel.class);
 		});
+	}
+
+	/**
+	 * <code><pre>
+	 * select count(*) from document d where d.created_at between '2023-06-01T00:00:00' and '2023-07-01T00:00:00'
+	 *   and exists (select * from person p where d.created_by_id = p.id and p.created_at < '2023-06-01T00:00:05');
+	 * </pre></code>
+	 */
+	@Test
+	public void testInactivePersonsQuery() throws Exception {
+		final InactivePersonsQueryModel result = restTemplate.getForObject(
+				url() + "/api/v1/person/inactive?startTime={startTime}&endTime={endTime}", InactivePersonsQueryModel.class,
+				Map.of(
+						"startTime", "2023-06-01T00:00:00",
+						"endTime", "2023-07-01T00:00:00"));
+
+		assertEquals(2, result.number());
+		assertEquals(CommonUtils.TS_2, result.startTime());
 	}
 
 	protected String url() {

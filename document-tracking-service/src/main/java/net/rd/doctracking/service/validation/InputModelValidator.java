@@ -3,6 +3,8 @@ package net.rd.doctracking.service.validation;
 import net.rd.doctracking.service.model.*;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+
 public class InputModelValidator {
 
     public static final int MAX_STR_LENGTH = 500;
@@ -21,14 +23,6 @@ public class InputModelValidator {
                 && model.getTeamId() > 0;
     }
 
-    public static boolean valid(final PersonQueryParamModel model) {
-        return model != null
-                && validOptionalString(model.getEmail())
-                && validOptionalString(model.getFirstName())
-                && validOptionalString(model.getLastName())
-                && (model.getTeamId() == null || model.getTeamId() > 0);
-    }
-
     public static boolean valid(final DocumentModel model) {
         return model != null
                 && validMandatoryString(model.getName())
@@ -40,7 +34,13 @@ public class InputModelValidator {
                 && model.getCreatedById() > 0;
     }
 
-
+    public static boolean valid(
+            final LocalDateTime startTime,
+            final LocalDateTime endTime) {
+        return startTime != null
+                && endTime != null
+                && startTime.isBefore(endTime);
+    }
 
     static boolean validOptionalString(final String input) {
         final String trimmed = StringUtils.trimAllWhitespace(input);

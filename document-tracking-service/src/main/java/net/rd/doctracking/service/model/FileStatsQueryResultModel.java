@@ -32,7 +32,7 @@ public class FileStatsQueryResultModel {
     /**
      * Copy query values from the query param object
      */
-    public FileStatsQueryResultModel(final PersonQueryParamModel param) {
+    public FileStatsQueryResultModel(final InactivePersonsQueryModel param) {
 //        this.setStartTime(param.getStartTime());
 //        this.setEndTime(param.getEndTime());
 //        this.setTaskDefinitionId(param.getTaskDefinitionId());
