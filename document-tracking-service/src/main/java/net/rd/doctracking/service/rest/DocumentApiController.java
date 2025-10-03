@@ -1,7 +1,8 @@
 package net.rd.doctracking.service.rest;
 
+import net.rd.doctracking.service.model.DocumentLongestWordSynonymsModel;
 import net.rd.doctracking.service.model.DocumentModel;
-import net.rd.doctracking.service.model.DocumentStatsModel;
+import net.rd.doctracking.service.model.DocumentWordsFrequencyModel;
 import net.rd.doctracking.service.service.DocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +60,12 @@ public class DocumentApiController {
     }
 
     @GetMapping("/api/v1/document/{id}/stats/words-frequency")
-    public DocumentStatsModel documentStatsWordsFrequency(@PathVariable final Long id) {
+    public DocumentWordsFrequencyModel documentStatsWordsFrequency(@PathVariable final Long id) {
         return documentService.documentStatsWordsFrequency(id);
+    }
+
+    @GetMapping("/api/v1/document/{id}/stats/synonyms")
+    public DocumentLongestWordSynonymsModel documentLongestWordSynonyms(@PathVariable final Long id) {
+        return documentService.documentLongestWordSynonyms(id);
     }
 }

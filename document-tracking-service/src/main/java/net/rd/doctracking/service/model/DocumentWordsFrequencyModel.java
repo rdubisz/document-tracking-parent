@@ -3,9 +3,9 @@ package net.rd.doctracking.service.model;
 import java.util.Map;
 
 /**
- * Query result contains query parameter: document dd and map of word:frequency
+ * Query result contains query parameter: document id and map of word:frequency
  */
-public record DocumentStatsModel(
+public record DocumentWordsFrequencyModel(
         Long documentId,
         Map<String, Long> stats){
 }

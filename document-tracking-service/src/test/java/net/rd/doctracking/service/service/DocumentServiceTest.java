@@ -17,6 +17,12 @@ class DocumentServiceTest {
     }
 
     @Test
+    void calculateWordsFrequencyEmpty() {
+        final Map<String, Long> result = tested.calculateWordsFrequency("");
+        assertEquals(0L, result.size());
+    }
+
+    @Test
     void calculateWordsFrequencySimple() {
         final String text = "One Two one two Me me The the I i of Of OF Zero ";
 
@@ -52,5 +58,39 @@ class DocumentServiceTest {
         assertNull(result.get("the"));
         assertNull(result.get("The"));
         assertNull(result.get("a"));
+    }
+
+    @Test
+    void longestWordNull() {
+        final String result = tested.longestWord(null);
+        assertNull(result);
+    }
+
+    @Test
+    void longestWordEmpty() {
+        final String result = tested.longestWord("");
+        assertNull(result);
+    }
+
+    @Test
+    void longestWordExcludedOnly() {
+        final String result = tested.longestWord("I me the, a");
+        assertNull(result);
+    }
+
+    @Test
+    void longestWordComplex() {
+        final String text = """
+                A very nice sentence.
+                I'm @#$%^&! now
+                The blue apple;
+                Me, I and myself?
+                 Sentence {number} 5
+                And Mambo No.5
+                Apple is healthy /usually\\
+                """;
+
+        final String result = tested.longestWord(text);
+        assertEquals("sentence", result);
     }
 }

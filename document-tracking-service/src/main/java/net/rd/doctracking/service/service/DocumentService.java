@@ -6,8 +6,9 @@ import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
 import net.rd.doctracking.service.jpa.entity.DocumentEntity;
 import net.rd.doctracking.service.jpa.repository.DocumentRepository;
 import net.rd.doctracking.service.jpa.repository.PersonRepository;
+import net.rd.doctracking.service.model.DocumentLongestWordSynonymsModel;
 import net.rd.doctracking.service.model.DocumentModel;
-import net.rd.doctracking.service.model.DocumentStatsModel;
+import net.rd.doctracking.service.model.DocumentWordsFrequencyModel;
 import net.rd.doctracking.service.transformer.ModelEntityTransformer;
 import net.rd.doctracking.service.validation.InputModelValidator;
 import org.slf4j.Logger;
@@ -115,7 +116,7 @@ public class DocumentService {
         documentRepository.deleteById(id);
     }
 
-    public DocumentStatsModel documentStatsWordsFrequency(final Long id) {
+    public DocumentWordsFrequencyModel documentStatsWordsFrequency(final Long id) {
         log.info("Calculating document {} words frequency stats", id);
 
         final DocumentEntity documentEntity = documentRepository
@@ -124,18 +125,27 @@ public class DocumentService {
 
         final Map<String, Long> wordsMap = calculateWordsFrequency(documentEntity.getContent());
 
-        return new DocumentStatsModel(id, wordsMap);
+        return new DocumentWordsFrequencyModel(id, wordsMap);
+    }
+
+    public DocumentLongestWordSynonymsModel documentLongestWordSynonyms(final Long id) {
+        log.info("Finding document {} longest word synonyms", id);
+
+        final DocumentEntity documentEntity = documentRepository
+                .findById(id)
+                .orElseThrow(() -> new DocumentEntityNotFoundException(id));
+
+        final String longestWord = longestWord(documentEntity.getContent());
+
+        final List<String> synonyms = new ArrayList<>();
+
+        return new DocumentLongestWordSynonymsModel(id, longestWord, synonyms);
     }
 
     protected Map<String, Long> calculateWordsFrequency(final String text) {
         if(!StringUtils.hasLength(text))
             return Collections.emptyMap();
-
-        final String content = text.trim()
-                .replaceAll("[^a-zA-Z0-9\\s]"," ")
-                .replaceAll("\n", " ")
-                .toLowerCase();
-
+        final String content = cleanupText(text);
         if(!StringUtils.hasLength(content))
             return Collections.emptyMap();
 
@@ -148,5 +158,30 @@ public class DocumentService {
         }
         return map;
     }
+
+    protected String longestWord(final String text) {
+        if(!StringUtils.hasLength(text))
+            return null;
+        final String content = cleanupText(text);
+        if(!StringUtils.hasLength(content))
+            return null;
+
+        String longestSoFar = "";
+        for (final String word : content.split(" ")) {
+            if(!EXCLUDED.contains(word)) {
+                if(longestSoFar.length() < word.length())
+                    longestSoFar = word;
+            }
+        }
+        return longestSoFar.isEmpty() ? null : longestSoFar;
+    }
+
+    private static String cleanupText(String text) {
+        return text.trim()
+                .replaceAll("[^a-zA-Z0-9\\s]"," ")
+                .replaceAll("\n", " ")
+                .toLowerCase();
+    }
+
 
 }

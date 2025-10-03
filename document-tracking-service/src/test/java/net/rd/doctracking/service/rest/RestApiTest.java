@@ -153,8 +153,8 @@ public class RestApiTest {
 	 */
 	@Test
 	public void testWordFrequencyQuery() throws Exception {
-		final DocumentStatsModel result = restTemplate.getForObject(
-				url() + "/api/v1/document/1/stats/words-frequency", DocumentStatsModel.class);
+		final DocumentWordsFrequencyModel result = restTemplate.getForObject(
+				url() + "/api/v1/document/1/stats/words-frequency", DocumentWordsFrequencyModel.class);
 
 		assertEquals(1L, result.documentId());
 		assertEquals(2L, result.stats().get("apple"));
@@ -166,6 +166,19 @@ public class RestApiTest {
 		assertNull(result.stats().get("the"));
 		assertNull(result.stats().get("The"));
 		assertNull(result.stats().get("a"));
+	}
+
+	/**
+	 * Longest word: sentence.
+	 */
+	@Test
+	public void testLongestWordSynonymsQuery() throws Exception {
+		final DocumentLongestWordSynonymsModel result = restTemplate.getForObject(
+				url() + "/api/v1/document/1/stats/synonyms", DocumentLongestWordSynonymsModel.class);
+
+		assertEquals(1L, result.documentId());
+		assertEquals("sentence", result.longestWord());
+		assertFalse(result.synonyms().isEmpty());
 	}
 
 	protected String url() {
