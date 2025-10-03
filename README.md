@@ -89,6 +89,13 @@ curl -s --user "webuser:websecret" localhost:8080/api/v1/document/1/stats/words-
 ```
 
 
+### Document's longest word synonyms
+Version in this branch is not connecting to the Gemini AI, the returned list of synonyms is always empty
+```shell
+curl -s --user "webuser:websecret" localhost:8080/api/v1/document/1/stats/synonyms | jq
+```
+
+
 # Data store
 Data is stored in MariaDB, container named "db" by default or at localhost in spring profile "localhost".
 In a docker compose usage, the data can be viewed via [Adminer tool](http://localhost:10001/?server=db&username=dbuser&db=doctracking).
