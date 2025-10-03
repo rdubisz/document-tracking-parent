@@ -1,8 +1,10 @@
 package net.rd.doctracking.service.transformer;
 
 import net.rd.doctracking.service.CommonUtils;
+import net.rd.doctracking.service.jpa.entity.DocumentEntity;
 import net.rd.doctracking.service.jpa.entity.TeamEntity;
 import net.rd.doctracking.service.jpa.entity.PersonEntity;
+import net.rd.doctracking.service.model.DocumentModel;
 import net.rd.doctracking.service.model.TeamModel;
 import net.rd.doctracking.service.model.PersonModel;
 import org.junit.jupiter.api.Test;
@@ -13,10 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ModelEntityTransformerTest {
 
 
-    private final TeamModel teamModel = new TeamModel(1L, "S1", CommonUtils.TS_1);
-    private final TeamEntity teamEntity = new TeamEntity(1L, "S1", CommonUtils.TS_2);
-    private final PersonModel personModel = new PersonModel(1L, "abc@def@net", "Abc", "Def", teamModel.getId(), CommonUtils.TS_1);
-    private final PersonEntity personEntity = new PersonEntity(1L, "abc@def@net", "Abc", "Def", teamEntity, CommonUtils.TS_2);
+    private final TeamModel teamModel = new TeamModel(1L, "T1", CommonUtils.TS_1);
+    private final TeamEntity teamEntity = new TeamEntity(1L, "T2", CommonUtils.TS_2);
+    private final PersonModel personModel = new PersonModel(1L, "abc@def.net", "Abc", "Def", teamModel.getId(), CommonUtils.TS_1);
+    private final PersonEntity personEntity = new PersonEntity(1L, "xyz@aaa.net", "Qwerty", "Xyz", teamEntity, CommonUtils.TS_2);
+    private final DocumentModel documentModel = new DocumentModel(1L, "File-name", "Some words", CommonUtils.TS_1, "user1@dot.com", 2L);
+    private final DocumentEntity documentEntity = new DocumentEntity(1L, "File-name", "Some words", personEntity, "user2@dot.com", CommonUtils.TS_2);
 
 
     @Test
@@ -49,5 +53,25 @@ public class ModelEntityTransformerTest {
 
         personEntity.setTeamEntity(null);
         assertNull(ModelEntityTransformer.entityToModel(personEntity).getTeamId());
+    }
+
+    @Test
+    public void testModelToEntityDocument() {
+        assertEquals(documentModel, ModelEntityTransformer.entityToModel(ModelEntityTransformer.modelToEntity(documentModel)));
+        assertEquals(2L, ModelEntityTransformer.modelToEntity(documentModel).getCreatedById().getId());
+        assertNull(ModelEntityTransformer.entityToModel(ModelEntityTransformer.modelToEntity((DocumentModel) null)));
+
+        documentModel.setCreatedById(null);
+        assertNull(ModelEntityTransformer.modelToEntity(documentModel).getCreatedById());
+    }
+
+    @Test
+    public void testEntityToModelDocument() {
+        assertEquals(documentEntity, ModelEntityTransformer.modelToEntity(ModelEntityTransformer.entityToModel(documentEntity)));
+        assertEquals(1L, ModelEntityTransformer.entityToModel(documentEntity).getCreatedById());
+        assertNull(ModelEntityTransformer.modelToEntity(ModelEntityTransformer.entityToModel((DocumentEntity) null)));
+
+        documentEntity.setCreatedById(null);
+        assertNull(ModelEntityTransformer.entityToModel(documentEntity).getCreatedById());
     }
 }

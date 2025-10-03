@@ -38,34 +38,47 @@ Requires to have `curl` tool installed.
 curl -v --user "webuser:websecret" localhost:8080
 ```
 
+### Get all teams
+```shell
+curl -s --user "webuser:websecret" localhost:8080/api/v1/team | jq
+```
+
 ### Get all users
 ```shell
-curl --user "webuser:websecret" localhost:8080/api/v1/user
+curl -s --user "webuser:websecret" localhost:8080/api/v1/person | jq
 ```
 
 ### Get single user
 ```shell
-curl --user "webuser:websecret" localhost:8080/api/v1/user/1
+curl -s --user "webuser:websecret" localhost:8080/api/v1/person/1 | jq
 ```
 
 ### Getting non-existing user
 ```shell
-curl --user "webuser:websecret" localhost:8080/api/v1/user/90000
+curl --user "webuser:websecret" localhost:8080/api/v1/person/90000
 ```
 
 ### Create user
 ```shell
-curl --user "webuser:websecret" -X POST localhost:8080/api/v1/user -H 'Content-type:application/json' -d '{"name": "User200", "code": "u200"}'
+curl -s --user "webuser:websecret" -X POST localhost:8080/api/v1/person -H 'Content-type:application/json' -d '{"teamId":1,"email":"someone@company.com","firstName":"Some","lastName":"One"}'
 ```
 
 ### Update user
 ```shell
-curl --user "webuser:websecret" -X PUT localhost:8080/api/v1/user/1 -H 'Content-type:application/json' -d '{"id": "1", "name": "User-updated", "code": "usr-upd"}'
+curl -s --user "webuser:websecret" -X PUT localhost:8080/api/v1/person/1 -H 'Content-type:application/json' -d '{"id":1,"teamId":2,"email":"john.doe.updated@company.com","firstName":"John","lastName":"Updated"}'
 ```
+
+
+### Get all documents
+```shell
+curl -s --user "webuser:websecret" localhost:8080/api/v1/document | jq
+```
+
+{"id":1,"name":"File-name-0","content":"Some words","fileLength":10,"wordCount":2,"createdAt":"2023-05-01T00:00:00","createdByEmail":"john.doe@company.com","createdById":1}
 
 ### Query
 ```shell
-curl --user "webuser:websecret" localhost:8080/api/v1/user/operation/query?startTime=2023-01-01T00:00:05\&endTime=2023-01-02T10:00:00\&taskDefinitionId=1
+curl -s --user "webuser:websecret" localhost:8080/api/v1/person/query?startTime=2023-01-01T00:00:05\&endTime=2023-01-02T10:00:00\&taskDefinitionId=1 | jq
 ```
 
 

@@ -1,9 +1,9 @@
 package net.rd.doctracking.service.validation;
 
 import net.rd.doctracking.service.CommonUtils;
+import net.rd.doctracking.service.model.DocumentModel;
 import net.rd.doctracking.service.model.TeamModel;
 import net.rd.doctracking.service.model.PersonModel;
-import net.rd.doctracking.service.transformer.ModelEntityTransformerTest;
 import org.junit.jupiter.api.Test;
 
 
@@ -15,6 +15,9 @@ public class InputModelValidatorTest {
     private final TeamModel teamModel = new TeamModel( 101L, "A Team", CommonUtils.TS_1);
     private final PersonModel personModel = new PersonModel(
             999L, "xyz@bubble.com", "First", "Name", 321L, CommonUtils.TS_2);
+    private final DocumentModel documentModel = new DocumentModel(
+            999L, "File-name", "Some words", CommonUtils.TS_1, "user1@dot.com", 321L);
+
 
     @Test
     public void testValidTeamModelName() {
@@ -96,6 +99,71 @@ public class InputModelValidatorTest {
 
         personModel.setTeamId(0L);
         assertFalse(InputModelValidator.valid(personModel));
+    }
+
+    @Test
+    public void testValidDocumentModelCreatedById() {
+        assertTrue(InputModelValidator.valid(documentModel));
+
+        documentModel.setCreatedById(null);
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setCreatedById(-1L);
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setCreatedById(0L);
+        assertFalse(InputModelValidator.valid(documentModel));
+    }
+
+    @Test
+    public void testValidDocumentModelName() {
+        assertTrue(InputModelValidator.valid(documentModel));
+
+        documentModel.setName(null);
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setName("");
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setName("    ");
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setName("a".repeat(InputModelValidator.MAX_STR_LENGTH + 1));
+        assertFalse(InputModelValidator.valid(documentModel));
+    }
+
+    @Test
+    public void testValidDocumentModelContent() {
+        assertTrue(InputModelValidator.valid(documentModel));
+
+        documentModel.setContent(null);
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setContent("");
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setContent("    ");
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setContent("a".repeat(InputModelValidator.MAX_STR_LENGTH + 1));
+        assertFalse(InputModelValidator.valid(documentModel));
+    }
+
+    @Test
+    public void testValidDocumentModelCreatedByEmail() {
+        assertTrue(InputModelValidator.valid(documentModel));
+
+        documentModel.setCreatedByEmail(null);
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setCreatedByEmail("");
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setCreatedByEmail("    ");
+        assertFalse(InputModelValidator.valid(documentModel));
+
+        documentModel.setCreatedByEmail("a".repeat(InputModelValidator.MAX_STR_LENGTH + 1));
+        assertFalse(InputModelValidator.valid(documentModel));
     }
 
 }

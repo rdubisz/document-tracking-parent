@@ -70,10 +70,10 @@ public class TeamModel implements Auditable {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", TeamModel.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("name='" + name + "'")
-                .add("createdAt=" + createdAt)
+        return new StringJoiner(", ", TeamModel.class.getSimpleName() + "{", "}")
+                .add("\"id\":" + id)
+                .add("\"name\":\"" + name + "\"")
+                .add("\"createdAt\":" + createdAt)
                 .toString();
     }
 }

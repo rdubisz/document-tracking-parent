@@ -1,19 +1,12 @@
 package net.rd.doctracking.service.rest;
 
 import net.rd.doctracking.service.CommonUtils;
-import net.rd.doctracking.service.jpa.DatabaseConfiguration;
-import net.rd.doctracking.service.model.TeamModel;
-import net.rd.doctracking.service.model.PersonModel;
-import net.rd.doctracking.service.model.PersonQueryParamModel;
-import net.rd.doctracking.service.model.FileStatsQueryResultModel;
-import net.rd.doctracking.service.transformer.ModelEntityTransformerTest;
+import net.rd.doctracking.service.model.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-
-import java.util.Map;
 
 import static net.rd.doctracking.service.rest.RestSecurityConfig.WEB_SECRET;
 import static net.rd.doctracking.service.rest.RestSecurityConfig.WEB_USER;
@@ -30,6 +23,9 @@ public class RestApiTest {
 			null, "A-Team", CommonUtils.TS_2);
 	private final PersonModel personModel = new PersonModel(
 			null, "xyz@bubble.com", "First", "Name", 1L, CommonUtils.TS_2);
+	private final DocumentModel documentModel = new DocumentModel(
+			999L, "File-name", "Some words", CommonUtils.TS_1, "user1@dot.com", 321L);
+
 
 	@Autowired
 	public RestApiTest(
@@ -67,6 +63,15 @@ public class RestApiTest {
 	}
 
 	@Test
+	public void testGetAllPersons() throws Exception {
+		final String returned = restTemplate.getForObject(url() + "/api/v1/person", String.class);
+		assertThat(returned).contains("John");
+		assertThat(returned).contains("Jane");
+		assertThat(returned).contains("Doe");
+		assertThat(returned).contains("bill@gates.windows");
+	}
+
+	@Test
 	public void testCreateAndDeletePerson() throws Exception {
 		final PersonModel returned = restTemplate.postForObject(
 				url() + "/api/v1/person", personModel, PersonModel.class);
@@ -98,6 +103,35 @@ public class RestApiTest {
 //				FileStatsQueryResultModel.class, paramsMap);
 //		assertEquals(60420L, result.getResultValue().longValue());
 //	}
+
+	@Test
+	public void testGetAllDocuments() throws Exception {
+		final String returned = restTemplate.getForObject(url() + "/api/v1/document", String.class);
+		assertThat(returned).contains("John");
+		assertThat(returned).contains("Jane");
+		assertThat(returned).contains("Doe");
+		assertThat(returned).contains("bill@gates.windows");
+	}
+
+	@Test
+	public void testCreateAndDeleteDocument() throws Exception {
+		final DocumentModel returned = restTemplate.postForObject(
+				url() + "/api/v1/document", documentModel, DocumentModel.class);
+		assertEquals(documentModel.getName(), returned.getName());
+		assertEquals(documentModel.getContent(), returned.getContent());
+		assertEquals(documentModel.getFileLength(), returned.getFileLength());
+		assertEquals(documentModel.getCreatedByEmail(), returned.getCreatedByEmail());
+		restTemplate.delete(url() + "/api/v1/document" + returned.getId());
+	}
+
+	@Test
+	public void testCreateInvalidDocument() throws Exception {
+		assertThrows(Exception.class, () -> {
+			documentModel.setContent(null);
+			restTemplate.postForObject(
+					url() + "/api/v1/document", documentModel, DocumentModel.class);
+		});
+	}
 
 	protected String url() {
 		return "http://localhost:" + port + "/";

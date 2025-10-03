@@ -29,6 +29,19 @@ public class InputModelValidator {
                 && (model.getTeamId() == null || model.getTeamId() > 0);
     }
 
+    public static boolean valid(final DocumentModel model) {
+        return model != null
+                && validMandatoryString(model.getName())
+                && validMandatoryString(model.getContent())
+                && validMandatoryString(model.getCreatedByEmail())
+                && model.getFileLength() != null
+                && model.getFileLength() > 0
+                && model.getCreatedById() != null
+                && model.getCreatedById() > 0;
+    }
+
+
+
     static boolean validOptionalString(final String input) {
         final String trimmed = StringUtils.trimAllWhitespace(input);
 
@@ -56,5 +69,4 @@ public class InputModelValidator {
 
         return true;
     }
-
 }

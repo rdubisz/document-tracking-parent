@@ -100,13 +100,13 @@ public class PersonModel implements Auditable {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", PersonModel.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("teamId=" + teamId)
-                .add("email='" + email + "'")
-                .add("firstName='" + firstName + "'")
-                .add("lastName='" + lastName + "'")
-                .add("createdAt=" + createdAt)
+        return new StringJoiner(", ", PersonModel.class.getSimpleName() + "{", "}")
+                .add("\"id\":" + id)
+                .add("\"teamId\":" + teamId)
+                .add("\"email\":\"" + email + "\"")
+                .add("\"firstName\":\"" + firstName + "\"")
+                .add("\"lastName\":\"" + lastName + "\"")
+                .add("\"createdAt\":" + createdAt)
                 .toString();
     }
 }

@@ -3,7 +3,7 @@ package net.rd.doctracking.service.service;
 import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
 import net.rd.doctracking.service.exception.PersonEntityNotFoundException;
 import net.rd.doctracking.service.exception.PersonInvalidException;
-import net.rd.doctracking.service.exception.PersonQueryParamInvalidException;
+import net.rd.doctracking.service.jpa.entity.TeamEntity;
 import net.rd.doctracking.service.transformer.ModelEntityTransformer;
 import net.rd.doctracking.service.validation.InputModelValidator;
 import net.rd.doctracking.service.jpa.entity.PersonEntity;
@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PersonService {
@@ -75,18 +76,24 @@ public class PersonService {
 
 
     public PersonModel updateOrCreatePerson(
-            final PersonModel person,
+            final PersonModel personModel,
             final Long id) {
-        log.info("Updating person {} with id {}", person, id);
+        log.info("Updating person {} with id {}", personModel, id);
 
         return personRepository.findById(id).map(r -> {
-            r.setEmail(person.getEmail());
-            r.setFirstName(person.getFirstName());
-            r.setLastName(person.getLastName());
+            if(!Objects.equals(r.getTeamEntity().getId(), personModel.getTeamId())) {
+                final TeamEntity updatedTeamEntity = teamRepository
+                        .findById(personModel.getTeamId())
+                        .orElseThrow(() -> new TeamEntityNotFoundException(personModel.getTeamId()));
+                r.setTeamEntity(updatedTeamEntity);
+            }
+            r.setEmail(personModel.getEmail());
+            r.setFirstName(personModel.getFirstName());
+            r.setLastName(personModel.getLastName());
             final PersonEntity saved = personRepository.save(r);
             return ModelEntityTransformer.entityToModel(saved);
         }).orElseGet(() -> {
-            final PersonEntity personEntity = ModelEntityTransformer.modelToEntity(person);
+            final PersonEntity personEntity = ModelEntityTransformer.modelToEntity(personModel);
             personEntity.setId(id);
             final PersonEntity saved = personRepository.save(personEntity);
             return ModelEntityTransformer.entityToModel(saved);
