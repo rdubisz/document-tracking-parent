@@ -41,7 +41,15 @@ public class DatabaseConfiguration {
 
             // Before July 1, person1
             final DocumentEntity document1 = documentRepository.save(new DocumentEntity(
-                    null, "File-name-1", "Some words", person1, person1.getEmail(), CommonUtils.TS_1));
+                    null, "File-name-1", """
+                A very nice sentence.
+                I'm @#$%^&! now
+                The blue apple;
+                Me, I and myself?
+                 Sentence {number} 5
+                And Mambo No.5
+                Apple is healthy /usually\\
+                """, person1, person1.getEmail(), CommonUtils.TS_1));
             // July, person1
             final DocumentEntity document2 = documentRepository.save(new DocumentEntity(
                     null, "File-name-2", "Just three words", person1, person1.getEmail(), CommonUtils.TS_2.plusDays(1)));
@@ -53,7 +61,7 @@ public class DatabaseConfiguration {
                     null, "File-name-4", "Other words", person2, person2.getEmail(), CommonUtils.TS_1.plusDays(2)));
             // July, person2
             final DocumentEntity document5 = documentRepository.save(new DocumentEntity(
-                    null, "File-name-5", "I wrote the document", person2, person2.getEmail(), CommonUtils.TS_2.plusDays(2)));
+                    null, "File-name-5", "I wrote the !@#$%^&*(){/} document", person2, person2.getEmail(), CommonUtils.TS_2.plusDays(2)));
             // After June 1, person2
             final DocumentEntity document6 = documentRepository.save(new DocumentEntity(
                     null, "File-name-6", "The contract. A deal.", person2, person2.getEmail(), CommonUtils.TS_3.plusDays(2)));

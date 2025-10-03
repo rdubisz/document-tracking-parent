@@ -1,6 +1,7 @@
 package net.rd.doctracking.service.rest;
 
 import net.rd.doctracking.service.model.DocumentModel;
+import net.rd.doctracking.service.model.DocumentStatsModel;
 import net.rd.doctracking.service.service.DocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,14 +58,8 @@ public class DocumentApiController {
         documentService.deleteDocument(id);
     }
 
-//    @GetMapping("/api/v1/document/query")
-//    public Iterable<DocumentModel>  documentQuery(
-//            @RequestParam final String email,
-//            @RequestParam final String firstname,
-//            @RequestParam final String lastName,
-//            @RequestParam(required = false) final Long teamId) {
-//
-//        final DocumentQueryParamModel param = new DocumentQueryParamModel(teamId, email, firstname, lastName);
-//        returndocumentService.personQuery(param);
-//    }
+    @GetMapping("/api/v1/document/{id}/stats/words-frequency")
+    public DocumentStatsModel documentStatsWordsFrequency(@PathVariable final Long id) {
+        return documentService.documentStatsWordsFrequency(id);
+    }
 }

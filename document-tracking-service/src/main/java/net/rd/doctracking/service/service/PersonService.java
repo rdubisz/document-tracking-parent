@@ -28,8 +28,8 @@ public class PersonService {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private TeamRepository teamRepository;
-    private PersonRepository personRepository;
+    private final TeamRepository teamRepository;
+    private final PersonRepository personRepository;
 
     public PersonService(
             final TeamRepository teamRepository,

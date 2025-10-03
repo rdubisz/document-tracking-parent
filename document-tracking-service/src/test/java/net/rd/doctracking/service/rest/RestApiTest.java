@@ -80,7 +80,7 @@ public class RestApiTest {
 		assertEquals(personModel.getEmail(), returned.getEmail());
 		assertEquals(personModel.getFirstName(), returned.getFirstName());
 		assertEquals(personModel.getLastName(), returned.getLastName());
-		restTemplate.delete(url() + "/api/v1/person" + returned.getId());
+		restTemplate.delete(url() + "/api/v1/person/" + returned.getId());
 	}
 
 	@Test
@@ -137,6 +137,35 @@ public class RestApiTest {
 
 		assertEquals(2, result.number());
 		assertEquals(CommonUtils.TS_2, result.startTime());
+	}
+
+
+	/**
+	 * <code><pre>
+	 * A very nice sentence.
+	 * I'm @#$%^&! now
+	 * The blue apple;
+	 * Me, I and myself?
+	 *  Sentence {number} 5
+	 * And Mambo No.5
+	 * Apple is healthy /usually\
+	 * </pre></code>
+	 */
+	@Test
+	public void testWordFrequencyQuery() throws Exception {
+		final DocumentStatsModel result = restTemplate.getForObject(
+				url() + "/api/v1/document/1/stats/words-frequency", DocumentStatsModel.class);
+
+		assertEquals(1L, result.documentId());
+		assertEquals(2L, result.stats().get("apple"));
+		assertEquals(2L, result.stats().get("sentence"));
+		assertEquals(1L, result.stats().get("blue"));
+		assertEquals(1L, result.stats().get("usually"));
+		assertEquals(1L, result.stats().get("number"));
+		assertNull(result.stats().get("i"));
+		assertNull(result.stats().get("the"));
+		assertNull(result.stats().get("The"));
+		assertNull(result.stats().get("a"));
 	}
 
 	protected String url() {

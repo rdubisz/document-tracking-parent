@@ -2,33 +2,36 @@ package net.rd.doctracking.service.service;
 
 import net.rd.doctracking.service.exception.DocumentEntityNotFoundException;
 import net.rd.doctracking.service.exception.DocumentInvalidException;
-import net.rd.doctracking.service.exception.PersonEntityNotFoundException;
 import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
 import net.rd.doctracking.service.jpa.entity.DocumentEntity;
-import net.rd.doctracking.service.jpa.entity.PersonEntity;
 import net.rd.doctracking.service.jpa.repository.DocumentRepository;
 import net.rd.doctracking.service.jpa.repository.PersonRepository;
 import net.rd.doctracking.service.model.DocumentModel;
-import net.rd.doctracking.service.model.PersonModel;
+import net.rd.doctracking.service.model.DocumentStatsModel;
 import net.rd.doctracking.service.transformer.ModelEntityTransformer;
 import net.rd.doctracking.service.validation.InputModelValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DocumentService {
 
+    /**
+     * Ignore those words for document statistics.
+     */
+    private static final Set<String> EXCLUDED = Set.of("the", "me", "you", "i", "of", "and", "a", "we", " ", "");
+
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private PersonRepository personRepository;
-    private DocumentRepository documentRepository;
+    private final PersonRepository personRepository;
+    private final DocumentRepository documentRepository;
 
     public DocumentService(
             final PersonRepository personRepository,
@@ -110,6 +113,40 @@ public class DocumentService {
             throw new DocumentEntityNotFoundException(id);
 
         documentRepository.deleteById(id);
+    }
+
+    public DocumentStatsModel documentStatsWordsFrequency(final Long id) {
+        log.info("Calculating document {} words frequency stats", id);
+
+        final DocumentEntity documentEntity = documentRepository
+                .findById(id)
+                .orElseThrow(() -> new DocumentEntityNotFoundException(id));
+
+        final Map<String, Long> wordsMap = calculateWordsFrequency(documentEntity.getContent());
+
+        return new DocumentStatsModel(id, wordsMap);
+    }
+
+    protected Map<String, Long> calculateWordsFrequency(final String text) {
+        if(!StringUtils.hasLength(text))
+            return Collections.emptyMap();
+
+        final String content = text.trim()
+                .replaceAll("[^a-zA-Z0-9\\s]"," ")
+                .replaceAll("\n", " ")
+                .toLowerCase();
+
+        if(!StringUtils.hasLength(content))
+            return Collections.emptyMap();
+
+        final Map<String, Long> map = new HashMap<>();
+        for (final String word : content.split(" ")) {
+            if(!EXCLUDED.contains(word)) {
+                final Long count = map.getOrDefault(word, 0L);
+                map.put(word, count + 1);
+            }
+        }
+        return map;
     }
 
 }

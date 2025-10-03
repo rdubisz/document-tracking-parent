@@ -81,10 +81,11 @@ Query number of users inactive in a given period, who were registered before tha
 curl -s --user "webuser:websecret" localhost:8080/api/v1/person/inactive?startTime=2023-06-01T00:00:00\&endTime=2023-07-01T00:00:00 | jq
 ```
 
+
 ### Document words frequency
-words frequency for a given document id
+Words frequency for a given document id
 ```shell
-curl -s --user "webuser:websecret" localhost:8080/api/v1/document/1/wordsFrequency | jq
+curl -s --user "webuser:websecret" localhost:8080/api/v1/document/1/stats/words-frequency | jq
 ```
 
 
