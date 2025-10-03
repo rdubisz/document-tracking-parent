@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+
+  db:
+    image: mariadb:12.0.2
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_USER: dbuser
+      MARIADB_PASSWORD: dbsecret
+      MARIADB_ROOT_PASSWORD: dbrootsecret
+      MARIADB_DATABASE: doctracking
+    healthcheck:
+      test: mariadb --user=dbuser --password=dbsecret -e 'SELECT 1;' doctracking
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  adminer:
+    image: michalhosna/adminer
+    restart: always
+    ports:
+      - "10001:8080"
+    environment:
+      ADMINER_SERVER: db
+      ADMINER_USERNAME: dbuser
+      ADMINER_PASSWORD: dbsecret
+      ADMINER_DB: doctracking
+      ADMINER_DRIVER: server
+      ADMINER_AUTOLOGIN: 1
+      ADMINER_NAME: Adminer for dockerized MariaDB
+    depends_on:
+      db:
+        condition: service_healthy
+
+  backend-service:
+    build: document-tracking-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
