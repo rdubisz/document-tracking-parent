@@ -29,6 +29,8 @@
         <commons-lang3.version>3.19.0</commons-lang3.version>
         <flyway.version>11.13.2</flyway.version>
         <mariadb-connector.version>3.5.6</mariadb-connector.version>
+        <retrofit.version>3.0.0</retrofit.version>
+        <vaadin.version>24.9.2</vaadin.version>
         <!-- Spring -->
         <spring-boot.version>3.5.6</spring-boot.version>
         <spring-security.version>6.5.5</spring-security.version>
@@ -68,7 +70,10 @@
     </pluginRepositories>
 
     <modules>
+        <module>document-tracking-model</module>
         <module>document-tracking-service</module>
+        <module>document-tracking-client</module>
+        <module>document-tracking-ui</module>
     </modules>
 
     <dependencyManagement>
@@ -114,6 +119,18 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-security</artifactId>
                 <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>retrofit</artifactId>
+                <version>${retrofit.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents.client5</groupId>

@@ -1,7 +1,6 @@
 package net.rd.doctracking.service.rest;
 
-import net.rd.doctracking.service.CommonUtils;
-import net.rd.doctracking.service.model.*;
+import net.rd.doctracking.model.CommonUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

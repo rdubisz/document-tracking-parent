@@ -1,6 +1,6 @@
 package net.rd.doctracking.service.jpa;
 
-import net.rd.doctracking.service.CommonUtils;
+import net.rd.doctracking.model.CommonUtils;
 import net.rd.doctracking.service.jpa.entity.DocumentEntity;
 import net.rd.doctracking.service.jpa.repository.DocumentRepository;
 import net.rd.doctracking.service.jpa.repository.PersonRepository;

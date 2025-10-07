@@ -1,6 +1,6 @@
 package net.rd.doctracking.service.transformer;
 
-import net.rd.doctracking.service.CommonUtils;
+import net.rd.doctracking.model.CommonUtils;
 import net.rd.doctracking.service.jpa.entity.DocumentEntity;
 import net.rd.doctracking.service.jpa.entity.TeamEntity;
 import net.rd.doctracking.service.jpa.entity.PersonEntity;

@@ -1,6 +1,6 @@
 package net.rd.doctracking.service.validation;
 
-import net.rd.doctracking.service.CommonUtils;
+import net.rd.doctracking.model.CommonUtils;
 import net.rd.doctracking.service.model.DocumentModel;
 import net.rd.doctracking.service.model.TeamModel;
 import net.rd.doctracking.service.model.PersonModel;
