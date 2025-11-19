@@ -1,6 +1,6 @@
 package net.rd.doctracking.service.exception;
 
-import net.rd.doctracking.service.model.TeamModel;
+import net.rd.doctracking.model.TeamModel;
 
 public class TeamInvalidException extends RuntimeException {
 

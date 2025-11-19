@@ -6,7 +6,7 @@ import net.rd.doctracking.service.transformer.ModelEntityTransformer;
 import net.rd.doctracking.service.validation.InputModelValidator;
 import net.rd.doctracking.service.jpa.entity.TeamEntity;
 import net.rd.doctracking.service.jpa.repository.TeamRepository;
-import net.rd.doctracking.service.model.TeamModel;
+import net.rd.doctracking.model.TeamModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

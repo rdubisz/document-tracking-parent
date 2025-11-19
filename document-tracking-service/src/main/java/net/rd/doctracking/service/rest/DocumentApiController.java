@@ -1,8 +1,8 @@
 package net.rd.doctracking.service.rest;
 
-import net.rd.doctracking.service.model.DocumentLongestWordSynonymsModel;
-import net.rd.doctracking.service.model.DocumentModel;
-import net.rd.doctracking.service.model.DocumentWordsFrequencyModel;
+import net.rd.doctracking.model.DocumentLongestWordSynonymsModel;
+import net.rd.doctracking.model.DocumentModel;
+import net.rd.doctracking.model.DocumentWordsFrequencyModel;
 import net.rd.doctracking.service.service.DocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

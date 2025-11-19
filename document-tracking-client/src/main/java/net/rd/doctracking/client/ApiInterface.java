@@ -1,5 +1,7 @@
-package net.rd.doctracking.model;
+package net.rd.doctracking.client;
 
+import net.rd.doctracking.model.PersonModel;
+import net.rd.doctracking.model.TeamModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

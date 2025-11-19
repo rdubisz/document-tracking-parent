@@ -3,9 +3,9 @@ package net.rd.doctracking.service.transformer;
 import net.rd.doctracking.service.jpa.entity.DocumentEntity;
 import net.rd.doctracking.service.jpa.entity.TeamEntity;
 import net.rd.doctracking.service.jpa.entity.PersonEntity;
-import net.rd.doctracking.service.model.DocumentModel;
-import net.rd.doctracking.service.model.TeamModel;
-import net.rd.doctracking.service.model.PersonModel;
+import net.rd.doctracking.model.DocumentModel;
+import net.rd.doctracking.model.TeamModel;
+import net.rd.doctracking.model.PersonModel;
 import org.springframework.beans.BeanUtils;
 
 public class ModelEntityTransformer {

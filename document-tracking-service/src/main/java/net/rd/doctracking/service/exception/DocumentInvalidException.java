@@ -1,7 +1,7 @@
 package net.rd.doctracking.service.exception;
 
 
-import net.rd.doctracking.service.model.DocumentModel;
+import net.rd.doctracking.model.DocumentModel;
 
 public class DocumentInvalidException extends RuntimeException {
 

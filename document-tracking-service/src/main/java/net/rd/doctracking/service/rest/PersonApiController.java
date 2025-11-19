@@ -1,7 +1,7 @@
 package net.rd.doctracking.service.rest;
 
-import net.rd.doctracking.service.model.PersonModel;
-import net.rd.doctracking.service.model.InactivePersonsQueryModel;
+import net.rd.doctracking.model.PersonModel;
+import net.rd.doctracking.model.InactivePersonsQueryModel;
 import net.rd.doctracking.service.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

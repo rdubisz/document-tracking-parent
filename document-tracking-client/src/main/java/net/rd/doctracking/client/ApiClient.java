@@ -1,4 +1,4 @@
-package net.rd.doctracking.model;
+package net.rd.doctracking.client;
 
 import retrofit2.Retrofit;
 
@@ -8,5 +8,5 @@ public class ApiClient {
             .baseUrl("https://api.github.com")
             .build();
 
-    final ApiInterface service = retrofit.create(ApiInterface.class);
+    final ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 }

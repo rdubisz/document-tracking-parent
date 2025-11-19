@@ -1,7 +1,7 @@
 package net.rd.doctracking.service.jpa.entity;
 
 import jakarta.persistence.*;
-import net.rd.doctracking.model.CommonUtils;
+import net.rd.doctracking.CommonUtils;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

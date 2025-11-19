@@ -1,6 +1,6 @@
 package net.rd.doctracking.service.validation;
 
-import net.rd.doctracking.service.model.*;
+import net.rd.doctracking.model.*;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
