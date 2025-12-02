@@ -65,7 +65,7 @@ public class PersonService {
         if (!InputModelValidator.valid(personModel))
             throw new PersonInvalidException(personModel);
 
-        if(!teamRepository.existsById(personModel.getTeamId()))
+        if (!teamRepository.existsById(personModel.getTeamId()))
             throw new TeamEntityNotFoundException(personModel.getTeamId());
 
         if (personModel.getCreatedAt() == null)
@@ -83,7 +83,7 @@ public class PersonService {
         log.info("Updating person {} with id {}", personModel, id);
 
         return personRepository.findById(id).map(r -> {
-            if(!Objects.equals(r.getTeamEntity().getId(), personModel.getTeamId())) {
+            if (!Objects.equals(r.getTeamEntity().getId(), personModel.getTeamId())) {
                 final TeamEntity updatedTeamEntity = teamRepository
                         .findById(personModel.getTeamId())
                         .orElseThrow(() -> new TeamEntityNotFoundException(personModel.getTeamId()));

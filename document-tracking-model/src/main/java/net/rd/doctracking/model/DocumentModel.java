@@ -1,7 +1,6 @@
 package net.rd.doctracking.model;
 
 
-
 import net.rd.doctracking.CommonUtils;
 
 import java.time.LocalDateTime;

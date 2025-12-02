@@ -58,7 +58,7 @@ public class PersonApiController {
     }
 
     @GetMapping("/api/v1/person/inactive")
-    public InactivePersonsQueryModel  inactivePersonsQuery(
+    public InactivePersonsQueryModel inactivePersonsQuery(
             @RequestParam final LocalDateTime startTime,
             @RequestParam final LocalDateTime endTime) {
         return personService.inactivePersonsQuery(startTime, endTime);

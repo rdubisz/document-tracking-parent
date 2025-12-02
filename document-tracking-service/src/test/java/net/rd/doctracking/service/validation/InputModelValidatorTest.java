@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InputModelValidatorTest {
 
-    private final TeamModel teamModel = new TeamModel( 101L, "A Team", CommonUtils.TS_1);
+    private final TeamModel teamModel = new TeamModel(101L, "A Team", CommonUtils.TS_1);
     private final PersonModel personModel = new PersonModel(
             999L, "xyz@bubble.com", "First", "Name", 321L, CommonUtils.TS_2);
     private final DocumentModel documentModel = new DocumentModel(

@@ -8,5 +8,5 @@ import java.util.List;
 public record DocumentLongestWordSynonymsModel(
         Long documentId,
         String longestWord,
-        List<String> synonyms){
+        List<String> synonyms) {
 }

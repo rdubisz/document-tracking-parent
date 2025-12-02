@@ -3,6 +3,7 @@ package net.rd.doctracking;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Objects;
 
 public class CommonUtils {
 
@@ -24,9 +25,6 @@ public class CommonUtils {
     }
 
     public static LocalDateTime paramOrNow(final LocalDateTime param) {
-        if(param != null)
-            return param;
-        else
-            return now();
+        return Objects.requireNonNullElseGet(param, CommonUtils::now);
     }
 }

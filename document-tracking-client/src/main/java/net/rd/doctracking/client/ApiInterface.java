@@ -12,7 +12,7 @@ import java.util.List;
 interface ApiInterface {
 
     @GET("/api/v1/team")
-    Call<TeamModel> listAllTeams();
+    Call<List<TeamModel>> listAllTeams();
 
     @GET("/api/v1/team")
     Call<List<PersonModel>> listAllPersons();
