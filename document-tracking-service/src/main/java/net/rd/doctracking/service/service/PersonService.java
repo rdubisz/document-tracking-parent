@@ -1,5 +1,6 @@
 package net.rd.doctracking.service.service;
 
+import net.rd.doctracking.CommonUtils;
 import net.rd.doctracking.service.exception.QueryParamInvalidException;
 import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
 import net.rd.doctracking.service.exception.PersonEntityNotFoundException;
@@ -68,8 +69,8 @@ public class PersonService {
         if (!teamRepository.existsById(personModel.getTeamId()))
             throw new TeamEntityNotFoundException(personModel.getTeamId());
 
-        if (personModel.getCreatedAt() == null)
-            personModel.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
+        personModel.setCreatedAt(CommonUtils.paramOrNow(personModel.getCreatedAt()));
+        
         final PersonEntity personEntity = ModelEntityTransformer.modelToEntity(personModel);
         final PersonEntity saved = personRepository.save(personEntity);
 

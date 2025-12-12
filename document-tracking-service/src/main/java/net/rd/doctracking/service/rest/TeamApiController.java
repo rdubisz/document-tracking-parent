@@ -28,7 +28,7 @@ public class TeamApiController {
     }
 
     @PostMapping("/api/v1/team")
-    public TeamEntity createTeam(@RequestBody final TeamModel teamModel) {
+    public TeamModel createTeam(@RequestBody final TeamModel teamModel) {
         return teamService.createTeam(teamModel);
     }
 

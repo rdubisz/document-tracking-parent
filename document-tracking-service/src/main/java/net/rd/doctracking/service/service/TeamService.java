@@ -1,5 +1,6 @@
 package net.rd.doctracking.service.service;
 
+import net.rd.doctracking.CommonUtils;
 import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
 import net.rd.doctracking.service.exception.TeamInvalidException;
 import net.rd.doctracking.service.transformer.ModelEntityTransformer;
@@ -37,15 +38,18 @@ public class TeamService {
         return modelsList;
     }
 
-    public TeamEntity createTeam(final TeamModel teamModel) {
+    public TeamModel createTeam(final TeamModel teamModel) {
         log.info("Creating team {}", teamModel);
 
         if(!InputModelValidator.valid(teamModel))
             throw new TeamInvalidException(teamModel);
 
+        teamModel.setCreatedAt(CommonUtils.paramOrNow(teamModel.getCreatedAt()));
+
         final TeamEntity teamEntity = ModelEntityTransformer.modelToEntity(teamModel);
 
-        return teamRepository.save(teamEntity);
+        final TeamEntity savedEntity = teamRepository.save(teamEntity);
+        return ModelEntityTransformer.entityToModel(savedEntity);
     }
 
     public TeamModel getOneTeam(final Long id) {

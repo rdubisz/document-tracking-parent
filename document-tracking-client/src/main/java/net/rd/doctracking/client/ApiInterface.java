@@ -1,12 +1,11 @@
 package net.rd.doctracking.client;
 
-import net.rd.doctracking.model.PersonModel;
-import net.rd.doctracking.model.TeamModel;
+import net.rd.doctracking.model.*;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
+import retrofit2.Response;
+import retrofit2.http.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 interface ApiInterface {
@@ -14,11 +13,27 @@ interface ApiInterface {
     @GET("/api/v1/team")
     Call<List<TeamModel>> listAllTeams();
 
-    @GET("/api/v1/team")
+    @POST("/api/v1/team")
+    Call<TeamModel> createTeam(@Body final TeamModel teamModel);
+
+    @DELETE("/api/v1/team/{id}")
+    Call<Void> deleteTeam(@Path("id") final Long id);
+
+    @GET("/api/v1/person")
     Call<List<PersonModel>> listAllPersons();
 
+    @GET("/api/v1/person/inactive")
+    Call<InactivePersonsQueryModel> listInactivePersons(
+            @Query("startTime")  final LocalDateTime startTime,
+            @Query("endTime")  final LocalDateTime endTime);
+
     @POST("/api/v1/person")
-    Call<PersonModel> createUser(@Body PersonModel personModel);
+    Call<PersonModel> createPerson(@Body final PersonModel personModel);
+
+    @GET("/api/v1/document")
+    Call<List<DocumentModel>> listAllDocuments();
+
+    @GET("/api/v1/document/{id}/stats/words-frequency")
+    Call<DocumentWordsFrequencyModel> documentWordsFrequency(@Path("id") long id);
 
 }
-

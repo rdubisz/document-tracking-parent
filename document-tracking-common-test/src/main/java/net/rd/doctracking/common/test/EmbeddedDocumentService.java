@@ -43,6 +43,7 @@ public class EmbeddedDocumentService {
             log.error("Could not start document-tracking-service", e);
         }
     }
+
     public void stop() {
         if (container != null && container.isRunning())
             container.stop();

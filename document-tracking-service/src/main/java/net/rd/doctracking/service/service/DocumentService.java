@@ -1,5 +1,6 @@
 package net.rd.doctracking.service.service;
 
+import net.rd.doctracking.CommonUtils;
 import net.rd.doctracking.service.exception.DocumentEntityNotFoundException;
 import net.rd.doctracking.service.exception.DocumentInvalidException;
 import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
@@ -71,8 +72,8 @@ public class DocumentService {
         if(!personRepository.existsById(documentModel.getCreatedById()))
             throw new TeamEntityNotFoundException(documentModel.getCreatedById());
 
-        if (documentModel.getCreatedAt() == null)
-            documentModel.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
+        documentModel.setCreatedAt(CommonUtils.paramOrNow(documentModel.getCreatedAt()));
+
         final DocumentEntity personEntity = ModelEntityTransformer.modelToEntity(documentModel);
         final DocumentEntity saved = documentRepository.save(personEntity);
 

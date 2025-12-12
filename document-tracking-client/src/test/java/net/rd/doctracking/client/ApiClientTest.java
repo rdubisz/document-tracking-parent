@@ -11,6 +11,7 @@ import org.testcontainers.containers.Network;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,20 +61,40 @@ public class ApiClientTest {
 
     @Test
     public void testGetAllTeams() throws Exception {
-        Call<List<TeamModel>> teamModelCall = apiClient.apiInterface.listAllTeams();
-        Response<List<TeamModel>> callResponse = teamModelCall.execute();
-        String string = callResponse.toString();
+        Call<List<TeamModel>> call = apiClient.apiInterface.listAllTeams();
+        Response<List<TeamModel>> callResponse = call.execute();
         assertNotNull(callResponse);
+        List<TeamModel> list = callResponse.body();
+        assertNotNull(list);
+        assertEquals(3, list.size());
     }
 
     @Test
     public void testCreateAndDeleteTeam() throws Exception {
+        List<TeamModel> listBeforeCreate = apiClient.apiInterface.listAllTeams().execute().body();
+        assertEquals(3, listBeforeCreate.size());
 
+        //Add
+        TeamModel created = apiClient.apiInterface.createTeam(new TeamModel("To be deleted")).execute().body();
+        assertNotNull(created);
+        Call<List<TeamModel>> call = apiClient.apiInterface.listAllTeams();
+        List<TeamModel> listAfterCreate = call.execute().body();
+        assertEquals(4, listAfterCreate.size());
+
+        // Delete
+        apiClient.apiInterface.deleteTeam(created.getId()).execute();
+        List<TeamModel> list = apiClient.apiInterface.listAllTeams().execute().body();
+        assertEquals(3, list.size());
     }
 
     @Test
     public void testGetAllPersons() throws Exception {
-
+        Call<List<PersonModel>> call = apiClient.apiInterface.listAllPersons();
+        Response<List<PersonModel>> callResponse = call.execute();
+        assertNotNull(callResponse);
+        List<PersonModel> list = callResponse.body();
+        assertNotNull(list);
+        assertEquals(4, list.size());
     }
 
     @Test
@@ -88,7 +109,12 @@ public class ApiClientTest {
 
     @Test
     public void testGetAllDocuments() throws Exception {
-
+        Call<List<DocumentModel>> call = apiClient.apiInterface.listAllDocuments();
+        Response<List<DocumentModel>> callResponse = call.execute();
+        assertNotNull(callResponse);
+        List<DocumentModel> list = callResponse.body();
+        assertNotNull(list);
+        assertEquals(7, list.size());
     }
 
     @Test
@@ -104,13 +130,36 @@ public class ApiClientTest {
 
     @Test
     public void testInactivePersonsQuery() throws Exception {
-
+        Call<InactivePersonsQueryModel> call = apiClient.apiInterface.listInactivePersons(
+                LocalDateTime.parse("2023-06-01T00:00:00"),
+                LocalDateTime.parse("2023-07-01T00:00:00"));
+        Response<InactivePersonsQueryModel> callResponse = call.execute();
+        assertNotNull(callResponse);
+        InactivePersonsQueryModel model = callResponse.body();
+        assertNotNull(model);
+        assertEquals(2, model.number());
+        assertEquals(CommonUtils.TS_2, model.startTime());
     }
 
 
     @Test
     public void testWordFrequencyQuery() throws Exception {
+        final Call<DocumentWordsFrequencyModel> call =  apiClient.apiInterface.documentWordsFrequency(1);
+        Response<DocumentWordsFrequencyModel> callResponse = call.execute();
+        assertNotNull(callResponse);
+        DocumentWordsFrequencyModel model = callResponse.body();
+        assertNotNull(model);
 
+        assertEquals(1L, model.documentId());
+        assertEquals(2L, model.stats().get("apple"));
+        assertEquals(2L, model.stats().get("sentence"));
+        assertEquals(1L, model.stats().get("blue"));
+        assertEquals(1L, model.stats().get("usually"));
+        assertEquals(1L, model.stats().get("number"));
+        assertNull(model.stats().get("i"));
+        assertNull(model.stats().get("the"));
+        assertNull(model.stats().get("The"));
+        assertNull(model.stats().get("a"));
     }
 
 
