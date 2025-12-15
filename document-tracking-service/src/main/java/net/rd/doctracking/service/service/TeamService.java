@@ -39,7 +39,7 @@ public class TeamService {
     }
 
     public TeamModel createTeam(final TeamModel teamModel) {
-        log.info("Creating team {}", teamModel);
+        log.info("Creating team {}: {}", teamModel, teamModel);
 
         if(!InputModelValidator.valid(teamModel))
             throw new TeamInvalidException(teamModel);
@@ -61,17 +61,18 @@ public class TeamService {
     }
 
     public TeamModel updateOrCreateTeam(
-            final TeamModel team,
+            final TeamModel teamModel,
             final Long id) {
-        log.info("Updating team {}", id);
+        log.info("Upserting team {}: {}", id, teamModel);
+        teamModel.setCreatedAt(CommonUtils.paramOrNow(teamModel.getCreatedAt()));
+        teamModel.setId(id);
 
         return teamRepository.findById(id).map(s -> {
-            final TeamEntity teamEntity = ModelEntityTransformer.modelToEntity(team);
+            final TeamEntity teamEntity = ModelEntityTransformer.modelToEntity(teamModel);
             final TeamEntity saved = teamRepository.save(teamEntity);
             return ModelEntityTransformer.entityToModel(saved);
         }).orElseGet(() -> {
-            team.setId(id);
-            final TeamEntity teamEntity = ModelEntityTransformer.modelToEntity(team);
+            final TeamEntity teamEntity = ModelEntityTransformer.modelToEntity(teamModel);
             final TeamEntity saved = teamRepository.save(teamEntity);
             return ModelEntityTransformer.entityToModel(saved);
         });

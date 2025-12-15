@@ -21,7 +21,7 @@ public class ApiClientTest {
     private static String url;
     private static EmbeddedMariaDb db;
     private static EmbeddedDocumentService documentService;
-    private static ApiClient apiClient;
+    private static ApiClient client;
 
     private final TeamModel teamModel = new TeamModel(
             null, "A-Team", CommonUtils.TS_2);
@@ -39,7 +39,7 @@ public class ApiClientTest {
         documentService = new EmbeddedDocumentService(network, db.getContainer());
         documentService.start();
         url = documentService.getContainerIp() + ":" + documentService.getContainer().getFirstMappedPort();
-        apiClient = new ApiClient(url());
+        client = new ApiClient(url());
     }
 
     @AfterAll
@@ -51,7 +51,7 @@ public class ApiClientTest {
     @Test
     public void testContextLoading() throws Exception {
         assertNotNull(url);
-        assertNotNull(apiClient);
+        assertNotNull(client);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ApiClientTest {
 
     @Test
     public void testGetAllTeams() throws Exception {
-        Call<List<TeamModel>> call = apiClient.apiInterface.listAllTeams();
+        Call<List<TeamModel>> call = client.apiIf.listAllTeams();
         Response<List<TeamModel>> callResponse = call.execute();
         assertNotNull(callResponse);
         List<TeamModel> list = callResponse.body();
@@ -70,26 +70,49 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testCreateAndDeleteTeam() throws Exception {
-        List<TeamModel> listBeforeCreate = apiClient.apiInterface.listAllTeams().execute().body();
-        assertEquals(3, listBeforeCreate.size());
+    public void testGetOneTeams() throws Exception {
+        Call<TeamModel> call = client.apiIf.getOneTeam(1L);
+        Response<TeamModel> callResponse = call.execute();
+        assertNotNull(callResponse);
+        TeamModel model = callResponse.body();
+        assertNotNull(model);
+        assertEquals("A-team", model.getName());
+    }
 
+    @Test
+    public void testCreateAndDeleteTeam() throws Exception {
+        List<TeamModel> listBeforeCreate = client.apiIf.listAllTeams().execute().body();
+        assertEquals(3, listBeforeCreate.size());
         //Add
-        TeamModel created = apiClient.apiInterface.createTeam(new TeamModel("To be deleted")).execute().body();
+        TeamModel created = client.apiIf.createTeam(new TeamModel("To be deleted")).execute().body();
         assertNotNull(created);
-        Call<List<TeamModel>> call = apiClient.apiInterface.listAllTeams();
+        Call<List<TeamModel>> call = client.apiIf.listAllTeams();
         List<TeamModel> listAfterCreate = call.execute().body();
         assertEquals(4, listAfterCreate.size());
-
         // Delete
-        apiClient.apiInterface.deleteTeam(created.getId()).execute();
-        List<TeamModel> list = apiClient.apiInterface.listAllTeams().execute().body();
+        client.apiIf.deleteTeam(created.getId()).execute();
+        List<TeamModel> list = client.apiIf.listAllTeams().execute().body();
         assertEquals(3, list.size());
     }
 
     @Test
+    public void testCreateOrUpdateTeam() throws Exception {
+        String nameBefore = client.apiIf.getOneTeam(2L).execute().body().getName();
+        assertEquals("B-team", nameBefore);
+        // Update
+        TeamModel updatedTeam = client.apiIf.updateOrCreateTeam(new TeamModel("Updated"), 2L).execute().body();
+        assertNotNull(updatedTeam);
+        assertEquals("Updated", updatedTeam.getName());
+        // Verify
+        String nameAfter = client.apiIf.getOneTeam(2L).execute().body().getName();
+        assertEquals("Updated", nameAfter);
+        // Reverse
+        client.apiIf.updateOrCreateTeam(new TeamModel("B-team"), 2L).execute().body();
+    }
+
+    @Test
     public void testGetAllPersons() throws Exception {
-        Call<List<PersonModel>> call = apiClient.apiInterface.listAllPersons();
+        Call<List<PersonModel>> call = client.apiIf.listAllPersons();
         Response<List<PersonModel>> callResponse = call.execute();
         assertNotNull(callResponse);
         List<PersonModel> list = callResponse.body();
@@ -109,7 +132,7 @@ public class ApiClientTest {
 
     @Test
     public void testGetAllDocuments() throws Exception {
-        Call<List<DocumentModel>> call = apiClient.apiInterface.listAllDocuments();
+        Call<List<DocumentModel>> call = client.apiIf.listAllDocuments();
         Response<List<DocumentModel>> callResponse = call.execute();
         assertNotNull(callResponse);
         List<DocumentModel> list = callResponse.body();
@@ -130,7 +153,7 @@ public class ApiClientTest {
 
     @Test
     public void testInactivePersonsQuery() throws Exception {
-        Call<InactivePersonsQueryModel> call = apiClient.apiInterface.listInactivePersons(
+        Call<InactivePersonsQueryModel> call = client.apiIf.listInactivePersons(
                 LocalDateTime.parse("2023-06-01T00:00:00"),
                 LocalDateTime.parse("2023-07-01T00:00:00"));
         Response<InactivePersonsQueryModel> callResponse = call.execute();
@@ -144,7 +167,7 @@ public class ApiClientTest {
 
     @Test
     public void testWordFrequencyQuery() throws Exception {
-        final Call<DocumentWordsFrequencyModel> call =  apiClient.apiInterface.documentWordsFrequency(1);
+        final Call<DocumentWordsFrequencyModel> call =  client.apiIf.documentWordsFrequency(1);
         Response<DocumentWordsFrequencyModel> callResponse = call.execute();
         assertNotNull(callResponse);
         DocumentWordsFrequencyModel model = callResponse.body();

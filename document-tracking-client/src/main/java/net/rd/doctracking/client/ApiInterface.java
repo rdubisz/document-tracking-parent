@@ -2,7 +2,6 @@ package net.rd.doctracking.client;
 
 import net.rd.doctracking.model.*;
 import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.http.*;
 
 import java.time.LocalDateTime;
@@ -13,8 +12,16 @@ interface ApiInterface {
     @GET("/api/v1/team")
     Call<List<TeamModel>> listAllTeams();
 
+    @GET("/api/v1/team/{id}")
+    Call<TeamModel> getOneTeam(@Path("id") final Long id);
+
     @POST("/api/v1/team")
     Call<TeamModel> createTeam(@Body final TeamModel teamModel);
+
+    @PUT("/api/v1/team/{id}")
+    Call<TeamModel> updateOrCreateTeam(
+            @Body final TeamModel teamModel,
+            @Path("id") final Long id);
 
     @DELETE("/api/v1/team/{id}")
     Call<Void> deleteTeam(@Path("id") final Long id);

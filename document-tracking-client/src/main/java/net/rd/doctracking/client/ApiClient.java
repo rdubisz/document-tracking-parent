@@ -6,7 +6,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
-import org.jetbrains.annotations.NotNull;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -14,7 +13,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class ApiClient {
 
     final Retrofit retrofit;
-    final ApiInterface apiInterface;
+    final ApiInterface apiIf;
 
     public ApiClient(String url) {
         retrofit = new Retrofit.Builder()
@@ -22,10 +21,9 @@ public class ApiClient {
                 .addConverterFactory(converterFactory())
                 .client(httpClient())
                 .build();
-        apiInterface = retrofit.create(ApiInterface.class);
+        apiIf = retrofit.create(ApiInterface.class);
     }
 
-    @NotNull
     private static OkHttpClient httpClient() {
         final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(Level.BASIC);
