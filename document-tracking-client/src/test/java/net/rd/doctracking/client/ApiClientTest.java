@@ -21,7 +21,8 @@ public class ApiClientTest {
     private static String url;
     private static EmbeddedMariaDb db;
     private static EmbeddedDocumentService documentService;
-    private static ApiClient client;
+    private static ApiClient apiClient;
+    private static ApiInterface apiIf;
 
     private final TeamModel teamModel = new TeamModel(
             null, "A-Team", CommonUtils.TS_2);
@@ -39,7 +40,8 @@ public class ApiClientTest {
         documentService = new EmbeddedDocumentService(network, db.getContainer());
         documentService.start();
         url = documentService.getContainerIp() + ":" + documentService.getContainer().getFirstMappedPort();
-        client = new ApiClient(url());
+        apiClient = new ApiClient(url());
+        apiIf = apiClient.getApiInterface();
     }
 
     @AfterAll
@@ -51,17 +53,12 @@ public class ApiClientTest {
     @Test
     public void testContextLoading() throws Exception {
         assertNotNull(url);
-        assertNotNull(client);
+        assertNotNull(apiClient);
     }
-
-    @Test
-    public void testAbout() throws Exception {
-
-    }
-
+    
     @Test
     public void testGetAllTeams() throws Exception {
-        Call<List<TeamModel>> call = client.apiIf.listAllTeams();
+        Call<List<TeamModel>> call = apiIf.getAllTeams();
         Response<List<TeamModel>> callResponse = call.execute();
         assertNotNull(callResponse);
         List<TeamModel> list = callResponse.body();
@@ -71,7 +68,7 @@ public class ApiClientTest {
 
     @Test
     public void testGetOneTeams() throws Exception {
-        Call<TeamModel> call = client.apiIf.getOneTeam(1L);
+        Call<TeamModel> call = apiIf.getOneTeam(1L);
         Response<TeamModel> callResponse = call.execute();
         assertNotNull(callResponse);
         TeamModel model = callResponse.body();
@@ -81,38 +78,38 @@ public class ApiClientTest {
 
     @Test
     public void testCreateAndDeleteTeam() throws Exception {
-        List<TeamModel> listBeforeCreate = client.apiIf.listAllTeams().execute().body();
+        List<TeamModel> listBeforeCreate = apiIf.getAllTeams().execute().body();
         assertEquals(3, listBeforeCreate.size());
         //Add
-        TeamModel created = client.apiIf.createTeam(new TeamModel("To be deleted")).execute().body();
+        TeamModel created = apiIf.createTeam(new TeamModel("To be deleted")).execute().body();
         assertNotNull(created);
-        Call<List<TeamModel>> call = client.apiIf.listAllTeams();
+        Call<List<TeamModel>> call = apiIf.getAllTeams();
         List<TeamModel> listAfterCreate = call.execute().body();
         assertEquals(4, listAfterCreate.size());
         // Delete
-        client.apiIf.deleteTeam(created.getId()).execute();
-        List<TeamModel> list = client.apiIf.listAllTeams().execute().body();
+        apiIf.deleteTeam(created.getId()).execute();
+        List<TeamModel> list = apiIf.getAllTeams().execute().body();
         assertEquals(3, list.size());
     }
 
     @Test
     public void testCreateOrUpdateTeam() throws Exception {
-        String nameBefore = client.apiIf.getOneTeam(2L).execute().body().getName();
+        String nameBefore = apiIf.getOneTeam(2L).execute().body().getName();
         assertEquals("B-team", nameBefore);
         // Update
-        TeamModel updatedTeam = client.apiIf.updateOrCreateTeam(new TeamModel("Updated"), 2L).execute().body();
+        TeamModel updatedTeam = apiIf.updateOrCreateTeam(new TeamModel("Updated"), 2L).execute().body();
         assertNotNull(updatedTeam);
         assertEquals("Updated", updatedTeam.getName());
         // Verify
-        String nameAfter = client.apiIf.getOneTeam(2L).execute().body().getName();
+        String nameAfter = apiIf.getOneTeam(2L).execute().body().getName();
         assertEquals("Updated", nameAfter);
         // Reverse
-        client.apiIf.updateOrCreateTeam(new TeamModel("B-team"), 2L).execute().body();
+        apiIf.updateOrCreateTeam(new TeamModel("B-team"), 2L).execute().body();
     }
 
     @Test
     public void testGetAllPersons() throws Exception {
-        Call<List<PersonModel>> call = client.apiIf.listAllPersons();
+        Call<List<PersonModel>> call = apiIf.getAllPersons();
         Response<List<PersonModel>> callResponse = call.execute();
         assertNotNull(callResponse);
         List<PersonModel> list = callResponse.body();
@@ -121,8 +118,29 @@ public class ApiClientTest {
     }
 
     @Test
-    public void testCreateAndDeletePerson() throws Exception {
+    public void testGetOnePerson() throws Exception {
+        Call<PersonModel> call = apiIf.getOnePerson(1L);
+        Response<PersonModel> callResponse = call.execute();
+        assertNotNull(callResponse);
+        PersonModel list = callResponse.body();
+        assertNotNull(list);
+        assertEquals("john.doe@company.com", list.getEmail());
+    }
 
+    @Test
+    public void testCreateAndDeletePerson() throws Exception {
+        // Create
+        PersonModel toCreateModel = new PersonModel(
+                null, "xyz@bubble.com", "First", "Name", 1L, CommonUtils.TS_2);
+        PersonModel createdModel = apiIf.createPerson(toCreateModel).execute().body();
+        assertEquals("xyz@bubble.com", createdModel.getEmail());
+        // Verify
+        PersonModel foundModel = apiIf.getOnePerson(createdModel.getId()).execute().body();
+        assertEquals("xyz@bubble.com", foundModel.getEmail());
+        // Delete
+        apiIf.deletePerson(foundModel.getId()).execute();
+        // Verify
+        assertNull(apiIf.getOnePerson(createdModel.getId()).execute().body());
     }
 
     @Test
@@ -132,7 +150,7 @@ public class ApiClientTest {
 
     @Test
     public void testGetAllDocuments() throws Exception {
-        Call<List<DocumentModel>> call = client.apiIf.listAllDocuments();
+        Call<List<DocumentModel>> call = apiIf.getAllDocuments();
         Response<List<DocumentModel>> callResponse = call.execute();
         assertNotNull(callResponse);
         List<DocumentModel> list = callResponse.body();
@@ -142,18 +160,24 @@ public class ApiClientTest {
 
     @Test
     public void testCreateAndDeleteDocument() throws Exception {
-
+        DocumentModel toCreateModel = new DocumentModel(
+                "File-name", "Some words", "user1@dot.com", 1L);
+        DocumentModel createdModel = apiIf.createDocument(toCreateModel).execute().body();
+        assertNotNull(createdModel);
+        DocumentModel foundModel = apiIf.getOneDocument(createdModel.getId()).execute().body();
+        assertNotNull(foundModel);
+        apiIf.deleteDocument(createdModel.getId()).execute();
+        assertNull(apiIf.getOneDocument(createdModel.getId()).execute().body());
     }
 
     @Test
     public void testCreateInvalidDocument() throws Exception {
 
     }
-
-
+    
     @Test
     public void testInactivePersonsQuery() throws Exception {
-        Call<InactivePersonsQueryModel> call = client.apiIf.listInactivePersons(
+        Call<InactivePersonsQueryModel> call = apiIf.inactivePersonsQuery(
                 LocalDateTime.parse("2023-06-01T00:00:00"),
                 LocalDateTime.parse("2023-07-01T00:00:00"));
         Response<InactivePersonsQueryModel> callResponse = call.execute();
@@ -164,10 +188,9 @@ public class ApiClientTest {
         assertEquals(CommonUtils.TS_2, model.startTime());
     }
 
-
     @Test
     public void testWordFrequencyQuery() throws Exception {
-        final Call<DocumentWordsFrequencyModel> call =  client.apiIf.documentWordsFrequency(1);
+        final Call<DocumentWordsFrequencyModel> call =  apiIf.documentStatsWordsFrequency(1L);
         Response<DocumentWordsFrequencyModel> callResponse = call.execute();
         assertNotNull(callResponse);
         DocumentWordsFrequencyModel model = callResponse.body();
@@ -185,10 +208,17 @@ public class ApiClientTest {
         assertNull(model.stats().get("a"));
     }
 
-
     @Test
     public void testLongestWordSynonymsQuery() throws Exception {
+        final Call<DocumentLongestWordSynonymsModel> call =  apiIf.documentStatsLongestWordSynonyms(1L);
+        Response<DocumentLongestWordSynonymsModel> callResponse = call.execute();
+        assertNotNull(callResponse);
+        DocumentLongestWordSynonymsModel model = callResponse.body();
+        assertNotNull(model);
 
+        assertEquals(1L, model.documentId());
+        assertEquals("sentence", model.longestWord());
+        assertFalse(model.synonyms().isEmpty());
     }
 
     protected static String url() {

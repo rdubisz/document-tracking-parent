@@ -12,8 +12,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class ApiClient {
 
-    final Retrofit retrofit;
-    final ApiInterface apiIf;
+    private final Retrofit retrofit;
+    private final ApiInterface apiInterface;
 
     public ApiClient(String url) {
         retrofit = new Retrofit.Builder()
@@ -21,7 +21,7 @@ public class ApiClient {
                 .addConverterFactory(converterFactory())
                 .client(httpClient())
                 .build();
-        apiIf = retrofit.create(ApiInterface.class);
+        apiInterface = retrofit.create(ApiInterface.class);
     }
 
     private static OkHttpClient httpClient() {
@@ -39,5 +39,13 @@ public class ApiClient {
         objectMapper.enable(JsonParser.Feature.INCLUDE_SOURCE_IN_LOCATION);
         objectMapper.registerModule(new JavaTimeModule());
         return JacksonConverterFactory.create(objectMapper);
+    }
+
+    public Retrofit getRetrofit() {
+        return retrofit;
+    }
+
+    public ApiInterface getApiInterface() {
+        return apiInterface;
     }
 }

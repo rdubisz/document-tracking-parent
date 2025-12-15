@@ -29,8 +29,8 @@ public class DocumentApiController {
         return documentService.getAllDocuments();
     }
 
-    @GetMapping("/api/v1/team/{id}/document")
-    public Iterable<DocumentModel> getTeamPersons(@PathVariable final Long id) {
+    @GetMapping("/api/v1/person/{id}/document")
+    public Iterable<DocumentModel> getPersonDocuments(@PathVariable final Long id) {
         return documentService.getPersonDocuments(id);
     }
 
@@ -65,7 +65,7 @@ public class DocumentApiController {
     }
 
     @GetMapping("/api/v1/document/{id}/stats/synonyms")
-    public DocumentLongestWordSynonymsModel documentLongestWordSynonyms(@PathVariable final Long id) {
+    public DocumentLongestWordSynonymsModel documentStatsLongestWordSynonyms(@PathVariable final Long id) {
         return documentService.documentLongestWordSynonyms(id);
     }
 }
