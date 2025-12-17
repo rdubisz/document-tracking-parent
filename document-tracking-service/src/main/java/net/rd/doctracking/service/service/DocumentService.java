@@ -3,6 +3,7 @@ package net.rd.doctracking.service.service;
 import net.rd.doctracking.CommonUtils;
 import net.rd.doctracking.service.exception.DocumentEntityNotFoundException;
 import net.rd.doctracking.service.exception.DocumentInvalidException;
+import net.rd.doctracking.service.exception.PersonEntityNotFoundException;
 import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
 import net.rd.doctracking.service.jpa.entity.DocumentEntity;
 import net.rd.doctracking.service.jpa.repository.DocumentRepository;
@@ -70,7 +71,7 @@ public class DocumentService {
             throw new DocumentInvalidException(documentModel);
 
         if(!personRepository.existsById(documentModel.getCreatedById()))
-            throw new TeamEntityNotFoundException(documentModel.getCreatedById());
+            throw new PersonEntityNotFoundException(documentModel.getCreatedById());
 
         documentModel.setCreatedAt(CommonUtils.paramOrNow(documentModel.getCreatedAt()));
 
@@ -139,6 +140,7 @@ public class DocumentService {
         final String longestWord = longestWord(documentEntity.getContent());
 
         final List<String> synonyms = new ArrayList<>();
+        // TODO use library like https://opennlp.apache.org/ for fetching synonyms
 
         return new DocumentLongestWordSynonymsModel(id, longestWord, synonyms);
     }
