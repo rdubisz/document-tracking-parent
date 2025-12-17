@@ -1,17 +1,18 @@
 package net.rd.doctracking.service.service;
 
+import net.rd.doctracking.CommonUtils;
 import net.rd.doctracking.service.exception.QueryParamInvalidException;
 import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
 import net.rd.doctracking.service.exception.PersonEntityNotFoundException;
 import net.rd.doctracking.service.exception.PersonInvalidException;
 import net.rd.doctracking.service.jpa.entity.TeamEntity;
-import net.rd.doctracking.service.model.InactivePersonsQueryModel;
+import net.rd.doctracking.model.InactivePersonsQueryModel;
 import net.rd.doctracking.service.transformer.ModelEntityTransformer;
 import net.rd.doctracking.service.validation.InputModelValidator;
 import net.rd.doctracking.service.jpa.entity.PersonEntity;
 import net.rd.doctracking.service.jpa.repository.PersonRepository;
 import net.rd.doctracking.service.jpa.repository.TeamRepository;
-import net.rd.doctracking.service.model.PersonModel;
+import net.rd.doctracking.model.PersonModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -65,11 +66,11 @@ public class PersonService {
         if (!InputModelValidator.valid(personModel))
             throw new PersonInvalidException(personModel);
 
-        if(!teamRepository.existsById(personModel.getTeamId()))
+        if (!teamRepository.existsById(personModel.getTeamId()))
             throw new TeamEntityNotFoundException(personModel.getTeamId());
 
-        if (personModel.getCreatedAt() == null)
-            personModel.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
+        personModel.setCreatedAt(CommonUtils.paramOrNow(personModel.getCreatedAt()));
+        
         final PersonEntity personEntity = ModelEntityTransformer.modelToEntity(personModel);
         final PersonEntity saved = personRepository.save(personEntity);
 
@@ -83,7 +84,7 @@ public class PersonService {
         log.info("Updating person {} with id {}", personModel, id);
 
         return personRepository.findById(id).map(r -> {
-            if(!Objects.equals(r.getTeamEntity().getId(), personModel.getTeamId())) {
+            if (!Objects.equals(r.getTeamEntity().getId(), personModel.getTeamId())) {
                 final TeamEntity updatedTeamEntity = teamRepository
                         .findById(personModel.getTeamId())
                         .orElseThrow(() -> new TeamEntityNotFoundException(personModel.getTeamId()));

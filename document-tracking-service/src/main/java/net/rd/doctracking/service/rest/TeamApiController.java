@@ -2,7 +2,7 @@ package net.rd.doctracking.service.rest;
 
 import net.rd.doctracking.service.service.TeamService;
 import net.rd.doctracking.service.jpa.entity.TeamEntity;
-import net.rd.doctracking.service.model.TeamModel;
+import net.rd.doctracking.model.TeamModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ public class TeamApiController {
     }
 
     @PostMapping("/api/v1/team")
-    public TeamEntity createTeam(@RequestBody final TeamModel teamModel) {
+    public TeamModel createTeam(@RequestBody final TeamModel teamModel) {
         return teamService.createTeam(teamModel);
     }
 

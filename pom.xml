@@ -29,6 +29,10 @@
         <commons-lang3.version>3.19.0</commons-lang3.version>
         <flyway.version>11.13.2</flyway.version>
         <mariadb-connector.version>3.5.6</mariadb-connector.version>
+        <commons-dbcp2.version>2.13.0</commons-dbcp2.version>
+        <retrofit.version>3.0.0</retrofit.version>
+        <okhttp.version>5.3.2</okhttp.version>
+        <vaadin.version>24.9.2</vaadin.version>
         <!-- Spring -->
         <spring-boot.version>3.5.6</spring-boot.version>
         <spring-security.version>6.5.5</spring-security.version>
@@ -38,7 +42,8 @@
         <junit-jupiter.version>5.12.2</junit-jupiter.version>
         <assertj.version>3.24.2</assertj.version>
         <mockito.version>5.20.0</mockito.version>
-        <testcontainers.version>1.21.3</testcontainers.version>
+<!--        <testcontainers.version>1.21.3</testcontainers.version>-->
+        <testcontainers.version>2.0.2</testcontainers.version>
         <h2.version>2.4.240</h2.version>
 
         <!-- Docker variables -->
@@ -68,7 +73,10 @@
     </pluginRepositories>
 
     <modules>
+        <module>document-tracking-model</module>
+        <module>document-tracking-common-test</module>
         <module>document-tracking-service</module>
+        <module>document-tracking-client</module>
     </modules>
 
     <dependencyManagement>
@@ -116,9 +124,31 @@
                 <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.httpcomponents.client5</groupId>
-                <artifactId>httpclient5</artifactId>
-                <version>${httpclient.version}</version>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>retrofit</artifactId>
+                <version>${retrofit.version}</version>
+            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.apache.httpcomponents.client5</groupId>-->
+<!--                <artifactId>httpclient5</artifactId>-->
+<!--                <version>${httpclient.version}</version>-->
+<!--            </dependency>-->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>logging-interceptor</artifactId>
+                <version>${okhttp.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mariadb.jdbc</groupId>
@@ -142,6 +172,11 @@
                 <version>${flyway.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-dbcp2</artifactId>
+                <version>${commons-dbcp2.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-jooq</artifactId>
             </dependency>
@@ -151,25 +186,27 @@
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
                 <version>${junit-jupiter.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
                 <version>${junit-jupiter.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
                 <version>${spring-boot.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
                 <version>${mockito.version}</version>
-                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+<!--                <artifactId>mariadb</artifactId>-->
+                <artifactId>testcontainers-mariadb</artifactId>
+                <version>${testcontainers.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,14 +1,16 @@
-package net.rd.doctracking.service.model;
+package net.rd.doctracking.model;
 
-import net.rd.doctracking.service.CommonUtils;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PersonModelTest {
 
     private final PersonModel tested = new PersonModel(
-            999L, "xyz@bubble.com", "First", "Name", 321L, CommonUtils.TS_1);
+            999L, "xyz@bubble.com", "First", "Name", 321L,
+            LocalDateTime.of(2023, 5, 1, 0, 0, 0));
 
     @Test
     void testToString() {

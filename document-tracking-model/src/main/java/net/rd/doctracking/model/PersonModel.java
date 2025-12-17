@@ -1,4 +1,4 @@
-package net.rd.doctracking.service.model;
+package net.rd.doctracking.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

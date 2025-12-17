@@ -1,6 +1,6 @@
 package net.rd.doctracking.service.validation;
 
-import net.rd.doctracking.service.model.*;
+import net.rd.doctracking.model.*;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -45,10 +45,10 @@ public class InputModelValidator {
     static boolean validOptionalString(final String input) {
         final String trimmed = StringUtils.trimAllWhitespace(input);
 
-        if(!StringUtils.hasLength(trimmed))
+        if (!StringUtils.hasLength(trimmed))
             return true;
 
-        if(trimmed.length() > MAX_STR_LENGTH)
+        if (trimmed.length() > MAX_STR_LENGTH)
             return false;
 
         // security checks go here
@@ -59,10 +59,10 @@ public class InputModelValidator {
     static boolean validMandatoryString(final String input) {
         final String trimmed = StringUtils.trimAllWhitespace(input);
 
-        if(!StringUtils.hasLength(trimmed))
+        if (!StringUtils.hasLength(trimmed))
             return false;
 
-        if(trimmed.length() > MAX_STR_LENGTH)
+        if (trimmed.length() > MAX_STR_LENGTH)
             return false;
 
         // security checks go here

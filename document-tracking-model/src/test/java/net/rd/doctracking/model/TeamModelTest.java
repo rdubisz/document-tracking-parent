@@ -1,15 +1,17 @@
-package net.rd.doctracking.service.model;
+package net.rd.doctracking.model;
 
-import net.rd.doctracking.service.CommonUtils;
 import org.junit.jupiter.api.Test;
 
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class TeamModelTest {
 
-    private final TeamModel tested = new TeamModel(101L, "A-Team", CommonUtils.TS_1);
+    private final TeamModel tested = new TeamModel(101L, "A-Team",
+            LocalDateTime.of(2023, 5, 1, 0, 0, 0));
 
     @Test
     void testToString() {

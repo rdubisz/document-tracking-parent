@@ -1,6 +1,6 @@
 package net.rd.doctracking.service.jpa;
 
-import net.rd.doctracking.service.CommonUtils;
+import net.rd.doctracking.CommonUtils;
 import net.rd.doctracking.service.jpa.entity.DocumentEntity;
 import net.rd.doctracking.service.jpa.repository.DocumentRepository;
 import net.rd.doctracking.service.jpa.repository.PersonRepository;
@@ -42,14 +42,14 @@ public class DatabaseConfiguration {
             // Before July 1, person1
             final DocumentEntity document1 = documentRepository.save(new DocumentEntity(
                     null, "File-name-1", """
-                A very nice sentence.
-                I'm @#$%^&! now
-                The blue apple;
-                Me, I and myself?
-                 Sentence {number} 5
-                And Mambo No.5
-                Apple is healthy /usually\\
-                """, person1, person1.getEmail(), CommonUtils.TS_1));
+                    A very nice sentence.
+                    I'm @#$%^&! now
+                    The blue apple;
+                    Me, I and myself?
+                     Sentence {number} 5
+                    And Mambo No.5
+                    Apple is healthy /usually\\
+                    """, person1, person1.getEmail(), CommonUtils.TS_1));
             // July, person1
             final DocumentEntity document2 = documentRepository.save(new DocumentEntity(
                     null, "File-name-2", "Just three words", person1, person1.getEmail(), CommonUtils.TS_2.plusDays(1)));

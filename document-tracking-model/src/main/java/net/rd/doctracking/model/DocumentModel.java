@@ -1,7 +1,7 @@
-package net.rd.doctracking.service.model;
+package net.rd.doctracking.model;
 
 
-import net.rd.doctracking.service.CommonUtils;
+import net.rd.doctracking.CommonUtils;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

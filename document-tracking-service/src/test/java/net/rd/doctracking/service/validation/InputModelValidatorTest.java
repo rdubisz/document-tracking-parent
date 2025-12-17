@@ -1,9 +1,9 @@
 package net.rd.doctracking.service.validation;
 
-import net.rd.doctracking.service.CommonUtils;
-import net.rd.doctracking.service.model.DocumentModel;
-import net.rd.doctracking.service.model.TeamModel;
-import net.rd.doctracking.service.model.PersonModel;
+import net.rd.doctracking.CommonUtils;
+import net.rd.doctracking.model.DocumentModel;
+import net.rd.doctracking.model.TeamModel;
+import net.rd.doctracking.model.PersonModel;
 import org.junit.jupiter.api.Test;
 
 
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InputModelValidatorTest {
 
-    private final TeamModel teamModel = new TeamModel( 101L, "A Team", CommonUtils.TS_1);
+    private final TeamModel teamModel = new TeamModel(101L, "A Team", CommonUtils.TS_1);
     private final PersonModel personModel = new PersonModel(
             999L, "xyz@bubble.com", "First", "Name", 321L, CommonUtils.TS_2);
     private final DocumentModel documentModel = new DocumentModel(

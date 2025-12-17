@@ -1,14 +1,17 @@
-package net.rd.doctracking.service.model;
+package net.rd.doctracking.model;
 
-import net.rd.doctracking.service.CommonUtils;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DocumentModelTest {
 
     private final DocumentModel tested = new DocumentModel(
-            999L, "File-name", "Some words", CommonUtils.TS_1, "user1@dot.com", 321L);
+            999L, "File-name", "Some words",
+            LocalDateTime.of(2023, 5, 1, 0, 0, 0),
+            "user1@dot.com", 321L);
 
     @Test
     void testToString() {

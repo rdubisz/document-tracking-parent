@@ -1,14 +1,16 @@
 package net.rd.doctracking.service.service;
 
+import net.rd.doctracking.CommonUtils;
 import net.rd.doctracking.service.exception.DocumentEntityNotFoundException;
 import net.rd.doctracking.service.exception.DocumentInvalidException;
+import net.rd.doctracking.service.exception.PersonEntityNotFoundException;
 import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
 import net.rd.doctracking.service.jpa.entity.DocumentEntity;
 import net.rd.doctracking.service.jpa.repository.DocumentRepository;
 import net.rd.doctracking.service.jpa.repository.PersonRepository;
-import net.rd.doctracking.service.model.DocumentLongestWordSynonymsModel;
-import net.rd.doctracking.service.model.DocumentModel;
-import net.rd.doctracking.service.model.DocumentWordsFrequencyModel;
+import net.rd.doctracking.model.DocumentLongestWordSynonymsModel;
+import net.rd.doctracking.model.DocumentModel;
+import net.rd.doctracking.model.DocumentWordsFrequencyModel;
 import net.rd.doctracking.service.transformer.ModelEntityTransformer;
 import net.rd.doctracking.service.validation.InputModelValidator;
 import org.slf4j.Logger;
@@ -69,10 +71,10 @@ public class DocumentService {
             throw new DocumentInvalidException(documentModel);
 
         if(!personRepository.existsById(documentModel.getCreatedById()))
-            throw new TeamEntityNotFoundException(documentModel.getCreatedById());
+            throw new PersonEntityNotFoundException(documentModel.getCreatedById());
 
-        if (documentModel.getCreatedAt() == null)
-            documentModel.setCreatedAt(LocalDateTime.now(ZoneId.of("UTC")));
+        documentModel.setCreatedAt(CommonUtils.paramOrNow(documentModel.getCreatedAt()));
+
         final DocumentEntity personEntity = ModelEntityTransformer.modelToEntity(documentModel);
         final DocumentEntity saved = documentRepository.save(personEntity);
 
@@ -138,6 +140,7 @@ public class DocumentService {
         final String longestWord = longestWord(documentEntity.getContent());
 
         final List<String> synonyms = new ArrayList<>();
+        // TODO use library like https://opennlp.apache.org/ for fetching synonyms
 
         return new DocumentLongestWordSynonymsModel(id, longestWord, synonyms);
     }

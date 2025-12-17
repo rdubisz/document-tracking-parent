@@ -1,4 +1,4 @@
-package net.rd.doctracking.service.model;
+package net.rd.doctracking.model;
 
 import java.util.Map;
 
@@ -7,5 +7,5 @@ import java.util.Map;
  */
 public record DocumentWordsFrequencyModel(
         Long documentId,
-        Map<String, Long> stats){
+        Map<String, Long> stats) {
 }

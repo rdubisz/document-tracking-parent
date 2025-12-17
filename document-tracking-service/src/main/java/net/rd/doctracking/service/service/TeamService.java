@@ -1,12 +1,13 @@
 package net.rd.doctracking.service.service;
 
+import net.rd.doctracking.CommonUtils;
 import net.rd.doctracking.service.exception.TeamEntityNotFoundException;
 import net.rd.doctracking.service.exception.TeamInvalidException;
 import net.rd.doctracking.service.transformer.ModelEntityTransformer;
 import net.rd.doctracking.service.validation.InputModelValidator;
 import net.rd.doctracking.service.jpa.entity.TeamEntity;
 import net.rd.doctracking.service.jpa.repository.TeamRepository;
-import net.rd.doctracking.service.model.TeamModel;
+import net.rd.doctracking.model.TeamModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,15 +38,18 @@ public class TeamService {
         return modelsList;
     }
 
-    public TeamEntity createTeam(final TeamModel teamModel) {
-        log.info("Creating team {}", teamModel);
+    public TeamModel createTeam(final TeamModel teamModel) {
+        log.info("Creating team {}: {}", teamModel, teamModel);
 
         if(!InputModelValidator.valid(teamModel))
             throw new TeamInvalidException(teamModel);
 
+        teamModel.setCreatedAt(CommonUtils.paramOrNow(teamModel.getCreatedAt()));
+
         final TeamEntity teamEntity = ModelEntityTransformer.modelToEntity(teamModel);
 
-        return teamRepository.save(teamEntity);
+        final TeamEntity savedEntity = teamRepository.save(teamEntity);
+        return ModelEntityTransformer.entityToModel(savedEntity);
     }
 
     public TeamModel getOneTeam(final Long id) {
@@ -57,17 +61,18 @@ public class TeamService {
     }
 
     public TeamModel updateOrCreateTeam(
-            final TeamModel team,
+            final TeamModel teamModel,
             final Long id) {
-        log.info("Updating team {}", id);
+        log.info("Upserting team {}: {}", id, teamModel);
+        teamModel.setCreatedAt(CommonUtils.paramOrNow(teamModel.getCreatedAt()));
+        teamModel.setId(id);
 
         return teamRepository.findById(id).map(s -> {
-            final TeamEntity teamEntity = ModelEntityTransformer.modelToEntity(team);
+            final TeamEntity teamEntity = ModelEntityTransformer.modelToEntity(teamModel);
             final TeamEntity saved = teamRepository.save(teamEntity);
             return ModelEntityTransformer.entityToModel(saved);
         }).orElseGet(() -> {
-            team.setId(id);
-            final TeamEntity teamEntity = ModelEntityTransformer.modelToEntity(team);
+            final TeamEntity teamEntity = ModelEntityTransformer.modelToEntity(teamModel);
             final TeamEntity saved = teamRepository.save(teamEntity);
             return ModelEntityTransformer.entityToModel(saved);
         });

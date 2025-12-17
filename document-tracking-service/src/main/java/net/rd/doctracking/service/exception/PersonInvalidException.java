@@ -1,6 +1,6 @@
 package net.rd.doctracking.service.exception;
 
-import net.rd.doctracking.service.model.PersonModel;
+import net.rd.doctracking.model.PersonModel;
 
 public class PersonInvalidException extends RuntimeException {
 
